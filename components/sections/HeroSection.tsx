@@ -216,7 +216,7 @@ export default function HeroSection({
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3">
             <a
-              href="https://wa.me/573001234567?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20inmobiliaria"
+              href="https://wa.me/573227340446?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20inmobiliaria"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary inline-flex justify-center gap-2.5"

@@ -526,31 +526,31 @@ function InversionesSection() {
 ───────────────────────────────────────────────────────────────────────── */
 const PROPERTIES = [
   {
-    slug:     "apartamento-chico-norte",
-    label:    "Chicó Norte · Bogotá",
-    title:    "Penthouse con terrazas",
-    area:     "186 m²",
-    image:    "/images/property-1.webp",
+    slug:     "alameda-san-antonio",
+    label:    "Usaquén · Bogotá",
+    title:    "Alameda San Antonio II",
+    area:     "67 m²",
+    image:    "/images/properties/alameda-san-antonio/01.webp",
     tag:      "Venta",
     position: "object-center",
   },
   {
-    slug:     "casa-chia-sabana",
-    label:    "Chía · Sabana Norte",
-    title:    "Casa campestre con jardín",
-    area:     "312 m²",
-    image:    "/images/property-2.webp",
+    slug:     "altos-san-jorge",
+    label:    "Suba · Bogotá",
+    title:    "Altos de San Jorge",
+    area:     "56 m²",
+    image:    "/images/properties/altos-san-jorge/01.webp",
     tag:      "Venta",
-    position: "object-center object-[center_42%]",
+    position: "object-center",
   },
   {
-    slug:     "apartamento-rosales",
-    label:    "Rosales · Bogotá",
-    title:    "Apartamento en piso 18",
-    area:     "124 m²",
-    image:    "/images/property-3.webp",
-    tag:      "Inversión",
-    position: "object-center object-[center_42%]",
+    slug:     "viantt-cajica",
+    label:    "Cajicá · Cundinamarca",
+    title:    "Viantt Apartamentos",
+    area:     "46 m²",
+    image:    "/images/properties/viantt/01.webp",
+    tag:      "Venta",
+    position: "object-center",
   },
 ] as const;
 
@@ -975,7 +975,7 @@ function ContactSection() {
 
             <div className="flex flex-col sm:flex-row gap-3.5">
               <a
-                href="https://wa.me/573001234567?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20inmobiliaria"
+                href="https://wa.me/573227340446?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20inmobiliaria"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary inline-flex justify-center gap-2.5"

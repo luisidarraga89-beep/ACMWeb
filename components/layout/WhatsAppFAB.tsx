@@ -15,7 +15,7 @@ interface WhatsAppFABProps {
 export default function WhatsAppFAB({
   delaySeconds = 5,
   message     = "Hola, me gustaría recibir asesoría inmobiliaria",
-  phoneNumber = "573001234567",
+  phoneNumber = "573227340446",
 }: WhatsAppFABProps) {
   const [visible,      setVisible]      = useState(false);
   const [showTooltip,  setShowTooltip]  = useState(false);
