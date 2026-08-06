@@ -846,7 +846,7 @@ function TestimonialsSection() {
     >
       <div className="container-acm">
 
-        <Reveal style={{ marginBottom: "clamp(3rem, 6vw, 5rem)" } as React.CSSProperties}>
+        <Reveal className="mb-14 md:mb-20 lg:mb-24">
           <Label>Lo que dicen nuestros clientes</Label>
           <Rule />
           <h2 id="testimonials-heading" className="sr-only">Testimonios</h2>
