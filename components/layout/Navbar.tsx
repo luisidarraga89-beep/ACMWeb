@@ -23,12 +23,12 @@ const drawerVariants = {
   closed: {
     opacity: 0,
     height: 0,
-    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] },
   },
   open: {
     opacity: 1,
     height: "auto",
-    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   },
 };
 
@@ -37,7 +37,7 @@ const drawerItemVariants = {
   open: (i: number) => ({
     opacity: 1,
     x: 0,
-    transition: { delay: i * 0.05, duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+    transition: { delay: i * 0.05, duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   }),
 };
 
