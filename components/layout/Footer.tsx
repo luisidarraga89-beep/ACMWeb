@@ -55,7 +55,7 @@ export default function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-4 focus-visible:outline-orange-acm rounded" aria-label="ACM Hogares e Inversiones">
               {/* WHITE variant — logo sobre fondo navy */}
-              <ACMLogo variant="wordmark" theme="color" className="h-7 w-auto" />
+              <ACMLogo variant="isotipo" theme="color" className="w-9 h-9" />
             </Link>
             <p className="font-display italic text-sm text-cream/65 leading-relaxed mb-1 max-w-[22ch]">
               "Certeza en cada metro cuadrado."
