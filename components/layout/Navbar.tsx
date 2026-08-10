@@ -59,7 +59,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 focus-visible:outline-orange-acm rounded" aria-label="ACM Hogares e Inversiones — Inicio">
-            <ACMLogo variant="isotipo" theme="white" className="w-9 h-9" />
+            <ACMLogo variant="isotipo" theme="color" className="w-9 h-9" />
             <span className="flex flex-col leading-none">
               <span className="font-sans font-bold text-white text-[15px] tracking-wide">ACM</span>
               <span className="font-sans text-[9px] tracking-[0.08em] uppercase text-cream/50 mt-0.5">
@@ -152,7 +152,7 @@ export default function Navbar() {
             >
               <div className="flex items-center justify-between px-6 border-b border-white/8" style={{ height: "64px" }}>
                 <Link href="/" className="flex items-center gap-2 focus-visible:outline-orange-acm" onClick={() => setMobileOpen(false)}>
-                  <ACMLogo variant="isotipo" theme="white" className="w-8 h-8" />
+                  <ACMLogo variant="isotipo" theme="color" className="w-8 h-8" />
                   <span className="font-sans font-bold text-white text-sm tracking-wide">ACM</span>
                 </Link>
                 <button onClick={() => setMobileOpen(false)} className="w-8 h-8 flex items-center justify-center rounded text-cream/60 hover:text-white hover:bg-white/8 transition-colors" aria-label="Cerrar menú">
