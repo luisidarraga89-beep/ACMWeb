@@ -228,7 +228,13 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      <div style={{ height: "72px" }} aria-hidden="true" />
+      {/*
+        Spacer: reserves 72px in normal flow so fixed-header pages don't
+        have content hidden underneath. Skipped on the homepage — the hero
+        section fills the first viewport itself and must sit at y:0 so the
+        transparent navbar overlays it directly (no cream gap at the top).
+      */}
+      {!isHomepage && <div style={{ height: "72px" }} aria-hidden="true" />}
     </>
   );
 }
