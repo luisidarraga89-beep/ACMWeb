@@ -426,7 +426,7 @@ function RentalManagementSection() {
             Invertir en una propiedad no debería convertirse en otro trabajo.
           </h2>
           <p className="font-sans text-cream/60" style={{ fontSize: TS.bodyLg, lineHeight: LH.body, marginBottom: "clamp(2.5rem, 5vw, 4rem)" }}>
-            Si ya tienes una propiedad o decides invertir con nosotros, podemos ayudarte también con su gestión para que no tengas que ocuparte personalmente del día a día.
+            Si ya tienes una propiedad o decides invertir con nosotros, podemos ayudarte también con su gestión —en cualquier parte del país— para que no tengas que ocuparte personalmente del día a día.
           </p>
         </Reveal>
 

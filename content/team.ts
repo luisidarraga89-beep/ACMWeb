@@ -7,7 +7,7 @@ export const team: TeamMember[] = [
     initial: "C",
     role:    "CEO & Cofundador",
     quote:   "La confianza no se promete. Se demuestra en cada decisión.",
-    bio:     "Christian fundó ACM con una idea muy clara: que comprar una vivienda o invertir en finca raíz debería ser un proceso transparente, bien acompañado y sin incertidumbre innecesaria. Conoce el mercado inmobiliario de Bogotá y la Sabana desde la experiencia práctica y entiende que detrás de cada operación hay un proyecto de vida o una decisión patrimonial importante. Su prioridad nunca ha sido cerrar una venta, sino ayudar a cada cliente a tomar una buena decisión, con honestidad, criterio y acompañamiento de principio a fin.",
+    bio:     "Christian fundó ACM con una idea muy clara: que comprar una vivienda o invertir en finca raíz debería ser un proceso transparente, bien acompañado y sin incertidumbre innecesaria. Conoce el mercado inmobiliario de Bogotá y Cundinamarca desde la experiencia práctica y entiende que detrás de cada operación hay un proyecto de vida o una decisión patrimonial importante. Su prioridad nunca ha sido cerrar una venta, sino ayudar a cada cliente a tomar una buena decisión, con honestidad, criterio y acompañamiento de principio a fin.",
     image:   "/images/team/christian-ureta.webp",
     email:   "christian@acminhogares.com",
     order:   1,

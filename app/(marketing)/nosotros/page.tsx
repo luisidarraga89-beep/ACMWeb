@@ -4,7 +4,7 @@ import NosotrosClient from "@/components/sections/nosotros/NosotrosClient";
 export const metadata: Metadata = {
   title: "Nosotros · Quiénes somos, historia y valores",
   description:
-    "Conoce a ACM Hogares e Inversiones: quiénes somos, nuestra historia, propósito, misión, visión y los valores que guían cada decisión inmobiliaria en Bogotá y la Sabana.",
+    "Conoce a ACM Hogares e Inversiones: quiénes somos, nuestra historia, propósito, misión, visión y los valores que guían cada decisión inmobiliaria en Bogotá y todo Cundinamarca.",
   alternates: { canonical: "https://acminhogares.com/nosotros" },
   openGraph: {
     title: "Nosotros · ACM Hogares e Inversiones",

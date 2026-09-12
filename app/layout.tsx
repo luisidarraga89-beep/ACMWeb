@@ -11,7 +11,7 @@ const jakartaFont = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["300","400"
 export const metadata: Metadata = {
   metadataBase: new URL("https://acminhogares.com"),
   title: { default: "ACM Hogares e Inversiones · Certeza en cada metro cuadrado.", template: "%s · ACM Hogares e Inversiones" },
-  description: "Asesoría inmobiliaria honesta en Bogotá y la Sabana de Cundinamarca.",
+  description: "Asesoría inmobiliaria honesta en Bogotá y todo Cundinamarca.",
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0F2044" };

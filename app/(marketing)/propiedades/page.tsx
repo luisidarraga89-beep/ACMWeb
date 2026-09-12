@@ -2,12 +2,22 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { getAllProperties } from "@/content/properties";
 import { TS, LH, LS, SP, EASE } from "@/lib/design-tokens";
 import { whatsappUrl } from "@/lib/config";
-import { Property } from "@/types/property";
+import { Property, PropertyType } from "@/types/property";
+import PropertyStatusRibbon from "@/components/ui/PropertyStatusRibbon";
+
+const TYPE_LABEL: Record<PropertyType, string> = {
+  apartamento: "Apartamento", casa: "Casa", penthouse: "Penthouse",
+  duplex: "Dúplex", lote: "Lote", oficina: "Oficina", local: "Local",
+};
+
+const MIN_OPTIONS = [0, 1, 2, 3, 4] as const;
+
+type SortKey = "recientes" | "precio-asc" | "precio-desc" | "area-desc";
 
 function Reveal({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref    = useRef<HTMLDivElement>(null);
@@ -24,6 +34,7 @@ function Reveal({ children, className, delay = 0 }: { children: React.ReactNode;
 
 function PropertyCard({ property, large = false }: { property: Property; large?: boolean }) {
   const primaryImage = property.images.find(i => i.isPrimary) ?? property.images[0];
+  const unavailable = property.status === "vendido" || property.status === "reservado";
   return (
     <Link
       href={`/propiedades/${property.slug}`}
@@ -37,15 +48,19 @@ function PropertyCard({ property, large = false }: { property: Property; large?:
           alt={primaryImage.alt}
           fill
           className="object-cover object-center transition-transform ease-out group-hover:scale-[1.026]"
-          style={{ transitionDuration: "1400ms" }}
+          style={{ transitionDuration: "1400ms", filter: unavailable ? "grayscale(0.5) brightness(0.85)" : undefined }}
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
       )}
       <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to top, rgba(6,10,22,0.82) 0%, rgba(6,10,22,0.15) 50%, transparent 70%)" }} aria-hidden="true" />
 
-      <span className="absolute font-sans font-semibold uppercase backdrop-blur-sm" style={{ top: "1rem", right: "1rem", fontSize: TS.caption, letterSpacing: LS.label, background: "rgba(15,32,68,0.6)", color: "rgba(251,248,244,0.85)", padding: "0.3rem 0.625rem", borderRadius: "2px" }}>
-        {property.status === "venta" ? "Venta" : "Arriendo"}
-      </span>
+      {unavailable && <PropertyStatusRibbon status={property.status as "vendido" | "reservado"} />}
+
+      {(property.status === "venta" || property.status === "arriendo") && (
+        <span className="absolute font-sans font-semibold uppercase backdrop-blur-sm" style={{ top: "1rem", right: "1rem", fontSize: TS.caption, letterSpacing: LS.label, background: "rgba(15,32,68,0.6)", color: "rgba(251,248,244,0.85)", padding: "0.3rem 0.625rem", borderRadius: "2px" }}>
+          {property.status === "venta" ? "Venta" : "Arriendo"}
+        </span>
+      )}
 
       {property.isNew && (
         <span className="absolute font-sans font-bold uppercase" style={{ top: "1rem", left: "1rem", fontSize: TS.caption, letterSpacing: LS.label, background: "#E8820C", color: "#FBF8F4", padding: "0.3rem 0.7rem", borderRadius: "2px", boxShadow: "0 2px 8px rgba(232,130,12,0.4)" }}>
@@ -67,8 +82,247 @@ function PropertyCard({ property, large = false }: { property: Property; large?:
   );
 }
 
+/* ─── FILTER CHIP GROUP ──────────────────────────────────────────────────── */
+function ChipGroup({
+  label, value, onChange, options,
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  options: readonly number[];
+}) {
+  return (
+    <div>
+      <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>{label}</p>
+      <div className="flex flex-wrap gap-2">
+        {options.map((n) => (
+          <button
+            key={n}
+            type="button"
+            onClick={() => onChange(n)}
+            className="font-sans font-medium rounded-full transition-all duration-200"
+            style={{
+              fontSize: TS.caption,
+              padding: "0.45rem 0.9rem",
+              border: value === n ? "1.5px solid #E8820C" : "1.5px solid rgba(15,32,68,0.15)",
+              background: value === n ? "rgba(232,130,12,0.08)" : "#fff",
+              color: value === n ? "#E8820C" : "rgba(15,32,68,0.65)",
+            }}
+          >
+            {n === 0 ? "Cualquiera" : `${n}+`}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── FILTERS PANEL ──────────────────────────────────────────────────────── */
+function PropertyFilters({
+  properties, filters, setFilters, resultCount,
+}: {
+  properties: Property[];
+  filters: ReturnType<typeof useFilterState>[0];
+  setFilters: ReturnType<typeof useFilterState>[1];
+  resultCount: number;
+}) {
+  const cities = useMemo(() => Array.from(new Set(properties.map(p => p.city))).sort(), [properties]);
+  const types  = useMemo(() => Array.from(new Set(properties.map(p => p.type))).sort(), [properties]);
+
+  const set = <K extends keyof typeof filters>(key: K, value: (typeof filters)[K]) =>
+    setFilters(f => ({ ...f, [key]: value }));
+
+  const isDefault =
+    !filters.q && filters.city === "todas" && filters.type === "todos" && filters.operation === "todas" &&
+    filters.minBeds === 0 && filters.minBaths === 0 && filters.minParking === 0 &&
+    !filters.priceMin && !filters.priceMax && !filters.areaMin && !filters.areaMax &&
+    !filters.hideUnavailable && filters.sortBy === "recientes";
+
+  return (
+    <div className="bg-white border border-graphite/10 rounded-lg p-6 md:p-8 mb-10">
+      {/* Search + operation */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-5 mb-6">
+        <div>
+          <label htmlFor="pf-q" className="block font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Buscar</label>
+          <input
+            id="pf-q"
+            type="text"
+            placeholder="Nombre, barrio o ciudad…"
+            className="input-acm"
+            value={filters.q}
+            onChange={(e) => set("q", e.target.value)}
+          />
+        </div>
+        <div>
+          <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Operación</p>
+          <div className="flex gap-2">
+            {(["todas", "venta", "arriendo"] as const).map((op) => (
+              <button
+                key={op}
+                type="button"
+                onClick={() => set("operation", op)}
+                className="font-sans font-medium rounded-full transition-all duration-200 whitespace-nowrap"
+                style={{
+                  fontSize: TS.caption,
+                  padding: "0.6rem 1.1rem",
+                  border: filters.operation === op ? "1.5px solid #E8820C" : "1.5px solid rgba(15,32,68,0.15)",
+                  background: filters.operation === op ? "rgba(232,130,12,0.08)" : "#fff",
+                  color: filters.operation === op ? "#E8820C" : "rgba(15,32,68,0.65)",
+                }}
+              >
+                {op === "todas" ? "Todas" : op === "venta" ? "Venta" : "Arriendo"}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* City + type */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+        <div>
+          <label htmlFor="pf-city" className="block font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Ciudad</label>
+          <select id="pf-city" className="input-acm" value={filters.city} onChange={(e) => set("city", e.target.value)}>
+            <option value="todas">Todas las ciudades</option>
+            {cities.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="pf-type" className="block font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Tipo de inmueble</label>
+          <select id="pf-type" className="input-acm" value={filters.type} onChange={(e) => set("type", e.target.value)}>
+            <option value="todos">Todos los tipos</option>
+            {types.map((t) => <option key={t} value={t}>{TYPE_LABEL[t]}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {/* Beds / baths / parking */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-6">
+        <ChipGroup label="Habitaciones" value={filters.minBeds} onChange={(v) => set("minBeds", v)} options={MIN_OPTIONS} />
+        <ChipGroup label="Baños" value={filters.minBaths} onChange={(v) => set("minBaths", v)} options={MIN_OPTIONS} />
+        <ChipGroup label="Parqueaderos" value={filters.minParking} onChange={(v) => set("minParking", v)} options={MIN_OPTIONS.slice(0, 3)} />
+      </div>
+
+      {/* Price + area ranges */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+        <div>
+          <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Precio (COP)</p>
+          <div className="flex items-center gap-2.5">
+            <input type="number" min={0} placeholder="Mínimo" className="input-acm" value={filters.priceMin} onChange={(e) => set("priceMin", e.target.value)} />
+            <span className="text-graphite/40 shrink-0">—</span>
+            <input type="number" min={0} placeholder="Máximo" className="input-acm" value={filters.priceMax} onChange={(e) => set("priceMax", e.target.value)} />
+          </div>
+        </div>
+        <div>
+          <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Área (m²)</p>
+          <div className="flex items-center gap-2.5">
+            <input type="number" min={0} placeholder="Mínimo" className="input-acm" value={filters.areaMin} onChange={(e) => set("areaMin", e.target.value)} />
+            <span className="text-graphite/40 shrink-0">—</span>
+            <input type="number" min={0} placeholder="Máximo" className="input-acm" value={filters.areaMax} onChange={(e) => set("areaMax", e.target.value)} />
+          </div>
+        </div>
+      </div>
+
+      {/* Sort + availability + clear */}
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 pt-6" style={{ borderTop: "1px solid rgba(90,98,120,0.1)" }}>
+        <div className="flex flex-col gap-4">
+          <label className="flex items-center gap-2.5 font-sans text-navy-deep/75 cursor-pointer" style={{ fontSize: TS.bodySm }}>
+            <input type="checkbox" checked={filters.hideUnavailable} onChange={(e) => set("hideUnavailable", e.target.checked)} className="w-4 h-4 accent-orange-acm" />
+            Ocultar vendidas y reservadas
+          </label>
+          <div>
+            <label htmlFor="pf-sort" className="block font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Ordenar por</label>
+            <select id="pf-sort" className="input-acm" style={{ maxWidth: "16rem" }} value={filters.sortBy} onChange={(e) => set("sortBy", e.target.value as SortKey)}>
+              <option value="recientes">Más recientes</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+              <option value="area-desc">Área: mayor a menor</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-start sm:items-end gap-3">
+          <p className="font-sans text-graphite/60" style={{ fontSize: TS.bodySm }}>
+            <span className="font-semibold text-navy-deep">{resultCount}</span> {resultCount === 1 ? "propiedad encontrada" : "propiedades encontradas"}
+          </p>
+          {!isDefault && (
+            <button
+              type="button"
+              onClick={() => setFilters(defaultFilters())}
+              className="font-sans font-medium text-graphite hover:text-navy-deep underline underline-offset-4 transition-colors"
+              style={{ fontSize: TS.caption }}
+            >
+              Limpiar filtros
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── FILTER STATE ───────────────────────────────────────────────────────── */
+function defaultFilters() {
+  return {
+    q: "",
+    city: "todas",
+    type: "todos",
+    operation: "todas" as "todas" | "venta" | "arriendo",
+    minBeds: 0,
+    minBaths: 0,
+    minParking: 0,
+    priceMin: "",
+    priceMax: "",
+    areaMin: "",
+    areaMax: "",
+    hideUnavailable: false,
+    sortBy: "recientes" as SortKey,
+  };
+}
+
+function useFilterState() {
+  return useState(defaultFilters());
+}
+
+function parseArea(area: string): number {
+  return parseInt(area, 10) || 0;
+}
+
 export default function PropiedadesPage() {
   const properties = getAllProperties();
+  const [filters, setFilters] = useFilterState();
+
+  const filtered = useMemo(() => {
+    const q = filters.q.trim().toLowerCase();
+
+    let result = properties.filter((p) => {
+      if (q) {
+        const haystack = `${p.title} ${p.neighborhood} ${p.city}`.toLowerCase();
+        if (!haystack.includes(q)) return false;
+      }
+      if (filters.city !== "todas" && p.city !== filters.city) return false;
+      if (filters.type !== "todos" && p.type !== filters.type) return false;
+      if (filters.operation !== "todas" && p.status !== filters.operation) return false;
+      if (filters.minBeds > 0 && (p.bedrooms ?? 0) < filters.minBeds) return false;
+      if (filters.minBaths > 0 && (p.bathrooms ?? 0) < filters.minBaths) return false;
+      if (filters.minParking > 0 && (p.parking ?? 0) < filters.minParking) return false;
+      if (filters.priceMin && (p.price ?? 0) < Number(filters.priceMin)) return false;
+      if (filters.priceMax && (p.price ?? 0) > Number(filters.priceMax)) return false;
+      const area = parseArea(p.area);
+      if (filters.areaMin && area < Number(filters.areaMin)) return false;
+      if (filters.areaMax && area > Number(filters.areaMax)) return false;
+      if (filters.hideUnavailable && (p.status === "vendido" || p.status === "reservado")) return false;
+      return true;
+    });
+
+    switch (filters.sortBy) {
+      case "precio-asc":  result = [...result].sort((a, b) => (a.price ?? 0) - (b.price ?? 0)); break;
+      case "precio-desc": result = [...result].sort((a, b) => (b.price ?? 0) - (a.price ?? 0)); break;
+      case "area-desc":   result = [...result].sort((a, b) => parseArea(b.area) - parseArea(a.area)); break;
+      default: /* recientes — ya viene ordenado por getAllProperties() */ break;
+    }
+
+    return result;
+  }, [properties, filters]);
 
   return (
     <>
@@ -93,12 +347,29 @@ export default function PropiedadesPage() {
       <section className="bg-cream" style={{ paddingBlock: SP.section }}>
         <div className="container-acm">
           <Reveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-              {properties.map((property, i) => (
-                <PropertyCard key={property._id} property={property} />
-              ))}
-            </div>
+            <PropertyFilters properties={properties} filters={filters} setFilters={setFilters} resultCount={filtered.length} />
           </Reveal>
+
+          {filtered.length > 0 ? (
+            <Reveal delay={0.05}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                {filtered.map((property) => (
+                  <PropertyCard key={property._id} property={property} />
+                ))}
+              </div>
+            </Reveal>
+          ) : (
+            <Reveal delay={0.05}>
+              <div className="text-center py-16 border border-dashed border-graphite/20 rounded-lg">
+                <p className="font-display italic text-navy-deep mb-3" style={{ fontSize: TS.displayMd }}>
+                  No encontramos propiedades con esos filtros.
+                </p>
+                <p className="font-sans text-graphite" style={{ fontSize: TS.bodySm }}>
+                  Prueba ajustando los filtros, o escríbenos y te ayudamos a encontrar la opción correcta.
+                </p>
+              </div>
+            </Reveal>
+          )}
 
           {/* CTA */}
           <Reveal delay={0.1} className="mt-16 md:mt-20">

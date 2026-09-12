@@ -8,6 +8,7 @@ import { motion, useInView } from "framer-motion";
 import { getPropertyBySlug, getAllProperties } from "@/content/properties";
 import { TS, LH, LS, SP, EASE } from "@/lib/design-tokens";
 import { whatsappUrl } from "@/lib/config";
+import PropertyStatusRibbon from "@/components/ui/PropertyStatusRibbon";
 
 function Reveal({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -47,7 +48,18 @@ export default function PropertyDetailPage({ params }: { params: { slug: string 
         <div className="container-acm" style={{ paddingTop: "2rem" }}>
           <div className="relative overflow-hidden mb-3" style={{ aspectRatio: "16/9" }}>
             {property.images[activeImage] && (
-              <Image src={property.images[activeImage].url} alt={property.images[activeImage].alt} fill className="object-cover object-center" sizes="100vw" priority />
+              <Image
+                src={property.images[activeImage].url}
+                alt={property.images[activeImage].alt}
+                fill
+                className="object-cover object-center"
+                style={{ filter: (property.status === "vendido" || property.status === "reservado") ? "grayscale(0.5) brightness(0.85)" : undefined }}
+                sizes="100vw"
+                priority
+              />
+            )}
+            {(property.status === "vendido" || property.status === "reservado") && (
+              <PropertyStatusRibbon status={property.status} size="lg" />
             )}
             {property.images.length > 1 && (
               <>

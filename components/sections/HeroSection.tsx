@@ -166,7 +166,7 @@ export default function HeroSection({
             className="font-sans font-semibold text-orange-acm uppercase tracking-[0.14em]"
             style={{ fontSize: "0.6875rem", marginBottom: "1.25rem" }}
           >
-            Bogotá · Cundinamarca · Sabana
+            Bogotá · Cundinamarca
           </p>
 
           {/* Headline — Lora italic, display size */}
@@ -193,7 +193,7 @@ export default function HeroSection({
             }}
           >
             Acompañamiento inmobiliario para hogares e inversiones
-            en Bogotá y la Sabana.
+            en Bogotá y todo Cundinamarca.
           </p>
 
         </motion.div>

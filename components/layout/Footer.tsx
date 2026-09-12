@@ -50,7 +50,7 @@ export default function Footer() {
               "Certeza en cada metro cuadrado."
             </p>
             <p className="font-sans text-[0.6875rem] font-semibold text-orange-acm uppercase tracking-[0.13em] mb-6">
-              Bogotá · Cundinamarca · Sabana
+              Bogotá · Cundinamarca
             </p>
             <div className="flex items-center gap-2" role="list" aria-label="Redes sociales">
               {SOCIAL_LINKS.map(({ label, href, icon }) => (
