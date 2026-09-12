@@ -100,7 +100,7 @@ export default function NosotrosClient() {
               </h2>
               <div>
                 <p className="font-sans text-graphite" style={{ fontSize: TS.bodyLg, lineHeight: LH.body, marginBottom: SP.betweenBodyP }}>
-                  Somos Alexandra, Christian y Mathias. ACM. Y antes de ser una empresa, fuimos una familia tomando decisiones inmobiliarias en un mercado donde muchas veces la información no es clara y el acompañamiento tampoco.
+                  Antes de ser una empresa, fuimos una familia tomando decisiones inmobiliarias en un mercado donde muchas veces la información no es clara y el acompañamiento tampoco.
                 </p>
                 <p className="font-sans text-graphite" style={{ fontSize: TS.bodyLg, lineHeight: LH.body, marginBottom: SP.betweenBodyP }}>
                   Vimos de cerca lo que pasa cuando una persona intenta comprar vivienda o invertir sin orientación real: procesos confusos, tiempos inciertos y asesores más enfocados en cerrar rápido que en ayudar bien.
