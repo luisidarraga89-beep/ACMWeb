@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { siteConfig } from "@/lib/config";
 
 interface WhatsAppFABProps {
   /** Segundos antes de que aparezca el botón. Default: 5 */
@@ -15,7 +16,7 @@ interface WhatsAppFABProps {
 export default function WhatsAppFAB({
   delaySeconds = 5,
   message     = "Hola, me gustaría recibir asesoría inmobiliaria",
-  phoneNumber = "573227340446",
+  phoneNumber = siteConfig.contact.whatsapp,
 }: WhatsAppFABProps) {
   const [visible,      setVisible]      = useState(false);
   const [showTooltip,  setShowTooltip]  = useState(false);
