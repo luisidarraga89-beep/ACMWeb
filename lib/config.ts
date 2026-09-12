@@ -6,8 +6,9 @@ export const siteConfig = {
 
   contact: {
     whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "573115480859",
-    email:    process.env.NEXT_PUBLIC_CONTACT_EMAIL   ?? "christian@acminhogares.com",
+    email:    process.env.NEXT_PUBLIC_CONTACT_EMAIL   ?? "acmhogareseinversiones@gmail.com",
     phone:    process.env.NEXT_PUBLIC_PHONE           ?? "+57 311 548 0859",
+    address:  "Calle 186 # 8-14b, Bogotá",
     city:     "Bogotá, Colombia",
   },
 
