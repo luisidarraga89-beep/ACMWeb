@@ -45,9 +45,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { whatsappUrl } from "@/lib/config";
+import { getAllProperties } from "@/content/properties";
+import { getFeaturedTestimonials } from "@/content/testimonials";
+import type { Property } from "@/types/property";
 
 /* ─────────────────────────────────────────────────────────────────────────
    TYPE SCALE
@@ -152,121 +155,6 @@ function Rule() {
       style={{ marginBottom: "clamp(1.5rem, 3vw, 2rem)" }}
       aria-hidden="true"
     />
-  );
-}
-
-function TextLink({
-  href,
-  children,
-  light = false,
-}: {
-  href: string;
-  children: React.ReactNode;
-  light?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={[
-        "group inline-flex items-center gap-4 font-sans font-medium",
-        "transition-colors duration-300",
-        light
-          ? "text-cream/65 hover:text-cream"
-          : "text-navy-deep hover:text-navy-mid",
-      ].join(" ")}
-      style={{ fontSize: TS.bodySm }}
-    >
-      <span>{children}</span>
-      <span
-        className={[
-          "block h-px transition-all duration-500",
-          "group-hover:w-12",
-          light
-            ? "w-8 bg-cream/28 group-hover:bg-cream/52"
-            : "w-8 bg-navy-deep/20 group-hover:bg-navy-mid/45",
-        ].join(" ")}
-        aria-hidden="true"
-      />
-    </Link>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────────────────────
-   §02 PHILOSOPHY
-───────────────────────────────────────────────────────────────────────── */
-function PhilosophySection() {
-  return (
-    <section
-      className="bg-cream"
-      style={{ paddingBlock: SP.section }}
-      aria-labelledby="philosophy-heading"
-    >
-      <div className="container-acm">
-        <div className="grid grid-cols-1 lg:grid-cols-[180px_1fr] gap-x-16 xl:gap-x-24 gap-y-8">
-
-          {/* Left — label + vertical rule */}
-          <div className="lg:pt-0.5">
-            <Label>Quiénes somos</Label>
-            <div
-              className="hidden lg:block w-px bg-graphite/10"
-              style={{
-                height: "clamp(5rem, 9vw, 9rem)",
-                marginTop: "1.25rem",
-              }}
-              aria-hidden="true"
-            />
-          </div>
-
-          {/* Right — single Reveal */}
-          <Reveal>
-            <Rule />
-            <h2
-              id="philosophy-heading"
-              className="font-display italic text-navy-deep"
-              style={{
-                fontSize: TS.displayLg,
-                letterSpacing: LS.display,
-                lineHeight: LH.display,
-                maxWidth: "24ch",
-                marginBottom: SP.headlineToBody,
-              }}
-            >
-              "Acompañamos a cada cliente con el mismo cuidado
-              con el que uno tomaría decisiones para su familia."
-            </h2>
-
-            <div
-              className="grid grid-cols-1 sm:grid-cols-2 gap-x-10"
-              style={{ maxWidth: "64ch", marginBottom: SP.bodyToCta }}
-            >
-              <p
-                className="font-sans text-graphite"
-                style={{
-                  fontSize: TS.bodyLg,
-                  lineHeight: LH.body,
-                  marginBottom: SP.betweenBodyP,
-                }}
-              >
-                Somos Alexandra, Christian y Mathias — ACM. Antes de ser
-                una empresa, fuimos una familia navegando un mercado donde
-                la información es escasa y el acompañamiento deficiente.
-              </p>
-              <p
-                className="font-sans text-graphite"
-                style={{ fontSize: TS.bodyLg, lineHeight: LH.body }}
-              >
-                Por eso nuestro trabajo empieza mucho antes de una visita.
-                Revisamos presupuesto, crédito y zonas reales. Sin presión.
-                Sin urgencia artificial. Solo claridad.
-              </p>
-            </div>
-
-            <TextLink href="/nosotros">Conocer el equipo</TextLink>
-          </Reveal>
-
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -400,187 +288,37 @@ function HogaresSection() {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   §04 INVERSIONES
-───────────────────────────────────────────────────────────────────────── */
-const TRUTHS = [
-  {
-    title: "Criterio antes que presión",
-    body:  "No buscamos mostrar la mayor cantidad de opciones. Buscamos las correctas para cada perfil.",
-  },
-  {
-    title: "Conocimiento local de verdad",
-    body:  "Cajicá norte tiene proyección real. El sur, no tanto hoy. Esa diferencia importa cuando inviertes.",
-  },
-  {
-    title: "Clientes en Colombia y en el exterior",
-    body:  "Proceso 100% remoto disponible. Videollamadas, gestión documental, seguimiento constante.",
-  },
-] as const;
-
-function InversionesSection() {
-  return (
-    <section
-      className="bg-navy-deep relative overflow-hidden"
-      style={{ paddingBlock: SP.section }}
-      aria-labelledby="inversiones-heading"
-    >
-      <div
-        className="absolute inset-0 pointer-events-none select-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.028) 1px, transparent 1px)",
-          backgroundSize: "38px 38px",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="container-acm relative">
-        <Reveal>
-          <Label>Para invertir</Label>
-
-          <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-x-20 gap-y-8 mt-1">
-            <div>
-              <Rule />
-              <h2
-                id="inversiones-heading"
-                className="font-display italic text-cream"
-                style={{
-                  fontSize: TS.displayLg,
-                  letterSpacing: LS.display,
-                  lineHeight: LH.display,
-                }}
-              >
-                Si esa zona no conviene
-                para invertir,
-                te lo decimos.
-              </h2>
-            </div>
-
-            <div className="lg:self-end">
-              <p
-                className="font-sans text-cream/55"
-                style={{
-                  fontSize: TS.bodyLg,
-                  lineHeight: LH.body,
-                  marginBottom: "1.75rem",
-                }}
-              >
-                Trabajamos diariamente en Bogotá y la Sabana. Sabemos qué
-                sectores tienen proyección real y dónde existe sobreoferta.
-                No desde mapas genéricos — desde estar en el terreno.
-              </p>
-              <TextLink href="/inversiones" light>
-                Explorar inversiones
-              </TextLink>
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.1}>
-          <div
-            className="grid grid-cols-1 md:grid-cols-3"
-            style={{
-              marginTop: "clamp(3rem, 6vw, 5rem)",
-              borderTop: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
-            {TRUTHS.map(({ title, body }, i) => (
-              <div
-                key={title}
-                className="py-10 md:py-11"
-                style={{
-                  paddingLeft:  i === 0 ? 0 : "clamp(1.5rem, 3vw, 2.5rem)",
-                  paddingRight: i === TRUTHS.length - 1 ? 0 : "clamp(1.5rem, 3vw, 2.5rem)",
-                  borderRight:
-                    i < TRUTHS.length - 1
-                      ? "1px solid rgba(255,255,255,0.08)"
-                      : "none",
-                }}
-              >
-                <p
-                  className="font-sans font-semibold text-cream leading-snug"
-                  style={{ fontSize: TS.bodySm, marginBottom: "0.75rem" }}
-                >
-                  {title}
-                </p>
-                <p
-                  className="font-sans text-cream/42"
-                  style={{ fontSize: TS.bodySm, lineHeight: LH.body }}
-                >
-                  {body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────────────────────
    §05 PROPERTIES
-   Image positions tuned per composition:
-   property-1 (portrait, lupa centered):  object-center
-   property-2 (landscape, bokeh left):    object-[center_45%]
-   property-3 (landscape, bokeh right):   object-[center_45%]
+   Pulls live data from content/properties — same source as /propiedades —
+   so the home page never drifts out of sync with what's actually published.
 ───────────────────────────────────────────────────────────────────────── */
-const PROPERTIES = [
-  {
-    slug:     "balcones-de-san-carlos",
-    label:    "Lijacá · Usaquén · Bogotá",
-    title:    "Balcones de San Carlos",
-    area:     "67 m²",
-    image:    "/images/properties/balcones-san-carlos/01.webp",
-    tag:      "Nuevo",
-    position: "object-center",
-  },
-  {
-    slug:     "caminos-del-norte",
-    label:    "Tibabita · Usaquén · Bogotá",
-    title:    "Caminos del Norte",
-    area:     "49 m²",
-    image:    "/images/properties/caminos-del-norte/01.webp",
-    tag:      "Nuevo",
-    position: "object-center",
-  },
-  {
-    slug:     "altos-san-jorge",
-    label:    "Suba · Bogotá",
-    title:    "Altos de San Jorge",
-    area:     "56 m²",
-    image:    "/images/properties/altos-san-jorge/01.webp",
-    tag:      "Venta",
-    position: "object-center",
-  },
-] as const;
-
 function PropertyCard({
   property,
   large = false,
 }: {
-  property: (typeof PROPERTIES)[number];
+  property: Property;
   large?: boolean;
 }) {
+  const image = property.images.find(i => i.isPrimary) ?? property.images[0];
+  const badge = property.isNew ? "Nuevo" : property.status === "venta" ? "Venta" : "Arriendo";
+
   return (
     <Link
       href={`/propiedades/${property.slug}`}
       className="group block relative overflow-hidden"
       style={{ aspectRatio: large ? "3/4" : "16/9" }}
-      aria-label={`${property.title} en ${property.label}`}
+      aria-label={`${property.title} en ${property.neighborhood}`}
     >
-      <Image
-        src={property.image}
-        alt={`${property.title} — ${property.label}`}
-        fill
-        className={[
-          "object-cover transition-transform ease-out",
-          property.position,
-          "group-hover:scale-[1.026]",
-        ].join(" ")}
-        style={{ transitionDuration: "1600ms" }}
-        sizes={large ? "(max-width:1024px) 100vw, 56vw" : "(max-width:1024px) 100vw, 42vw"}
-      />
+      {image && (
+        <Image
+          src={image.url}
+          alt={image.alt}
+          fill
+          className="object-cover transition-transform ease-out group-hover:scale-[1.026]"
+          style={{ transitionDuration: "1600ms" }}
+          sizes={large ? "(max-width:1024px) 100vw, 56vw" : "(max-width:1024px) 100vw, 42vw"}
+        />
+      )}
 
       <div
         className="absolute inset-0 pointer-events-none"
@@ -598,15 +336,15 @@ function PropertyCard({
           right: "1.125rem",
           fontSize: "0.5625rem",
           letterSpacing: LS.label,
-          background: property.tag === "Nuevo" ? "#E8820C" : "rgba(15,32,68,0.55)",
-          color: property.tag === "Nuevo" ? "#FBF8F4" : "rgba(251,248,244,0.82)",
+          background: property.isNew ? "#E8820C" : "rgba(15,32,68,0.55)",
+          color: property.isNew ? "#FBF8F4" : "rgba(251,248,244,0.82)",
           padding: "0.28rem 0.6rem",
           borderRadius: "2px",
-          backdropFilter: property.tag === "Nuevo" ? undefined : "blur(4px)",
-          boxShadow: property.tag === "Nuevo" ? "0 2px 8px rgba(232,130,12,0.4)" : undefined,
+          backdropFilter: property.isNew ? undefined : "blur(4px)",
+          boxShadow: property.isNew ? "0 2px 8px rgba(232,130,12,0.4)" : undefined,
         }}
       >
-        {property.tag}
+        {badge}
       </span>
 
       <div
@@ -621,7 +359,7 @@ function PropertyCard({
             marginBottom: "0.4rem",
           }}
         >
-          {property.label}
+          {property.neighborhood} · {property.city}
         </p>
         <h3
           className="font-display italic text-cream"
@@ -629,23 +367,29 @@ function PropertyCard({
             fontSize: large ? TS.displayMd : "1.0625rem",
             lineHeight: LH.display,
             letterSpacing: LS.display,
-            marginBottom: "0.4rem",
+            marginBottom: "0.5rem",
           }}
         >
           {property.title}
         </h3>
-        <p
-          className="font-mono text-cream/45"
-          style={{ fontSize: "0.75rem", letterSpacing: LS.data }}
-        >
-          {property.area}
-        </p>
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-cream/45" style={{ fontSize: "0.75rem", letterSpacing: LS.data }}>
+            {property.area}
+          </span>
+          {property.priceDisplay && (
+            <span className="font-sans font-semibold text-orange-acm" style={{ fontSize: large ? "0.9375rem" : "0.8125rem" }}>
+              {property.priceDisplay}
+            </span>
+          )}
+        </div>
       </div>
     </Link>
   );
 }
 
 function PropertiesSection() {
+  const properties = getAllProperties().slice(0, 3);
+
   return (
     <section
       className="bg-cream"
@@ -687,10 +431,10 @@ function PropertiesSection() {
 
         <Reveal delay={0.08}>
           <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-2.5 md:gap-3">
-            <PropertyCard property={PROPERTIES[0]} large />
+            <PropertyCard property={properties[0]} large />
             <div className="grid grid-rows-2 gap-2.5 md:gap-3">
-              <PropertyCard property={PROPERTIES[1]} />
-              <PropertyCard property={PROPERTIES[2]} />
+              <PropertyCard property={properties[1]} />
+              <PropertyCard property={properties[2]} />
             </div>
           </div>
         </Reveal>
@@ -812,35 +556,21 @@ function ProcessSection() {
 
 /* ─────────────────────────────────────────────────────────────────────────
    §07 TESTIMONIALS
-   Typography fix: quotes now use TS.quote (not a raw clamp).
-   Offset: second quote uses ml-auto on md+ — no grid gymnastics.
-   Figcaption: plain text-right for offset, text-left otherwise.
+   Carousel — one quote at a time, prev/next controls, dot indicators.
+   Data comes from content/testimonials.ts (single source of truth).
 ───────────────────────────────────────────────────────────────────────── */
-const TESTIMONIALS = [
-  {
-    id:     "t1",
-    quote:  "Antes de ir a ver el primer apartamento, ya teníamos la preaprobación del crédito lista. Eso cambió todo — entré a las visitas sabiendo qué podía comprar.",
-    name:   "Carolina Mejía",
-    detail: "Compradora · Chapinero Alto · 2025",
-    offset: false,
-  },
-  {
-    id:     "t2",
-    quote:  "Me dijeron sin rodeos que la zona que yo quería no tenía buena proyección para inversión ese año. Preferí escucharlos. Seis meses después entendí por qué.",
-    name:   "Ricardo Forero",
-    detail: "Inversionista · Cajicá · 2025",
-    offset: true,
-  },
-  {
-    id:     "t3",
-    quote:  "Compré desde Toronto sin pisar Colombia. Cada etapa fue clara. Llegué a firmar la escritura sabiendo exactamente qué iba a firmar y cuánto iba a pagar.",
-    name:   "Juliana Ospina",
-    detail: "Colombiana en el exterior · Bogotá · 2024",
-    offset: false,
-  },
-] as const;
-
 function TestimonialsSection() {
+  const testimonials = getFeaturedTestimonials();
+  const [index, setIndex] = useState(0);
+  const [dir,   setDir]   = useState(0);
+
+  const go = (next: number) => {
+    setDir(next > index ? 1 : -1);
+    setIndex((next + testimonials.length) % testimonials.length);
+  };
+
+  const t = testimonials[index];
+
   return (
     <section
       className="bg-cream"
@@ -849,72 +579,89 @@ function TestimonialsSection() {
     >
       <div className="container-acm">
 
-        <Reveal className="mb-14 md:mb-20 lg:mb-24">
-          <Label>Lo que dicen nuestros clientes</Label>
-          <Rule />
-          <h2 id="testimonials-heading" className="sr-only">Testimonios</h2>
+        <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12 md:mb-16">
+          <div>
+            <Label>Lo que dicen nuestros clientes</Label>
+            <Rule />
+            <h2 id="testimonials-heading" className="sr-only">Testimonios</h2>
+          </div>
+
+          <div className="flex items-center gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => go(index - 1)}
+              aria-label="Testimonio anterior"
+              className="w-10 h-10 rounded-full border border-navy-deep/15 flex items-center justify-center text-navy-deep/60 hover:text-navy-deep hover:border-navy-deep/30 transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => go(index + 1)}
+              aria-label="Siguiente testimonio"
+              className="w-10 h-10 rounded-full border border-navy-deep/15 flex items-center justify-center text-navy-deep/60 hover:text-navy-deep hover:border-navy-deep/30 transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
         </Reveal>
 
-        <div>
-          {TESTIMONIALS.map((t, i) => (
-            <div key={t.id}>
-              <Reveal>
-                <figure>
-                  <blockquote
-                    className="font-display italic text-navy-deep"
-                    style={{
-                      fontSize: TS.quote,
-                      letterSpacing: LS.display,
-                      lineHeight: LH.tight,
-                      maxWidth: "32em",
-                      /*
-                        Offset: the second testimonial shifts right on md+.
-                        ml-auto pushes it to the right edge naturally.
-                        On mobile all three are flush left.
-                      */
-                      marginLeft: t.offset ? "auto" : undefined,
-                      marginBottom: "1.25rem",
-                    }}
-                  >
-                    <span className="text-orange-acm" aria-hidden="true">"</span>
-                    {t.quote}
-                    <span className="text-orange-acm" aria-hidden="true">"</span>
-                  </blockquote>
+        <div className="relative overflow-hidden" style={{ minHeight: "clamp(13rem, 24vw, 16rem)" }}>
+          <AnimatePresence mode="wait" custom={dir}>
+            <motion.figure
+              key={t._id}
+              custom={dir}
+              initial={{ opacity: 0, x: dir >= 0 ? 24 : -24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: dir >= 0 ? -24 : 24 }}
+              transition={{ duration: 0.4, ease: EASE }}
+              className="absolute inset-0"
+            >
+              <blockquote
+                className="font-display italic text-navy-deep"
+                style={{
+                  fontSize: TS.quote,
+                  letterSpacing: LS.display,
+                  lineHeight: LH.tight,
+                  maxWidth: "42em",
+                  marginBottom: "1.25rem",
+                }}
+              >
+                <span className="text-orange-acm" aria-hidden="true">"</span>
+                {t.quote}
+                <span className="text-orange-acm" aria-hidden="true">"</span>
+              </blockquote>
 
-                  <figcaption
-                    style={{ textAlign: t.offset ? "right" : "left" }}
-                  >
-                    <p
-                      className="font-sans font-semibold text-navy-deep"
-                      style={{ fontSize: TS.bodySm }}
-                    >
-                      {t.name}
-                    </p>
-                    <p
-                      className="font-sans text-graphite/48"
-                      style={{
-                        fontSize: TS.caption,
-                        letterSpacing: LS.data,
-                        marginTop: "0.2rem",
-                      }}
-                    >
-                      {t.detail}
-                    </p>
-                  </figcaption>
-                </figure>
-              </Reveal>
+              <figcaption>
+                <p className="font-sans font-semibold text-navy-deep" style={{ fontSize: TS.bodySm }}>
+                  {t.name}
+                </p>
+                <p
+                  className="font-sans text-graphite/48"
+                  style={{ fontSize: TS.caption, letterSpacing: LS.data, marginTop: "0.2rem" }}
+                >
+                  {t.detail}
+                </p>
+              </figcaption>
+            </motion.figure>
+          </AnimatePresence>
+        </div>
 
-              {i < TESTIMONIALS.length - 1 && (
-                <div
-                  className="w-full bg-graphite/8"
-                  style={{
-                    height: "1px",
-                    margin: "clamp(2.5rem, 5vw, 4.5rem) 0",
-                  }}
-                  aria-hidden="true"
-                />
-              )}
-            </div>
+        <div className="flex items-center gap-2 mt-10">
+          {testimonials.map((item, i) => (
+            <button
+              key={item._id}
+              type="button"
+              onClick={() => go(i)}
+              aria-label={`Ver testimonio de ${item.name}`}
+              aria-current={i === index}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: i === index ? "1.5rem" : "0.4rem",
+                height: "0.4rem",
+                background: i === index ? "#E8820C" : "rgba(15,32,68,0.15)",
+              }}
+            />
           ))}
         </div>
 
@@ -959,8 +706,8 @@ function ContactSection() {
                 marginBottom: SP.headlineToBody,
               }}
             >
-              Antes de ir a ver el apartamento,
-              revisamos si el crédito da.
+              Una conversación directa,
+              sin presión ni letra pequeña.
             </h2>
 
             <p
@@ -1030,9 +777,7 @@ function ContactSection() {
 export default function HomeClient() {
   return (
     <>
-      <PhilosophySection />
       <HogaresSection />
-      <InversionesSection />
       <PropertiesSection />
       <ProcessSection />
       <TestimonialsSection />
