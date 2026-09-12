@@ -35,6 +35,15 @@ export const testimonials: Testimonial[] = [
     featured: true,
     order:    3,
   },
+  {
+    _id:      "t4",
+    quote:    "Christian y Juan Pablo me acompañaron en todo el proceso de mi vivienda desde el día uno: me ayudaron a tramitar mi crédito, presentaron los documentos conmigo y me mostraron muchas opciones de propiedades. Fueron muy pacientes y atentos, se nota que saben lo que hacen y se preocupan por el cliente. Lo hacen todo muy fácil para quien quiere comprar, porque hay mucho desconocimiento, pero ellos dan seguridad.",
+    name:     "Sarita Villegas",
+    detail:   "Compradora · Quindío · 2026",
+    type:     "hogar",
+    featured: true,
+    order:    4,
+  },
 ];
 
 export function getFeaturedTestimonials(): Testimonial[] {
