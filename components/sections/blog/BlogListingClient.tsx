@@ -97,14 +97,14 @@ function PostCard({ post }: { post: BlogPostMeta }) {
 export default function BlogListingClient({ posts, featured }: { posts: BlogPostMeta[]; featured: BlogPostMeta }) {
   const [filter, setFilter] = useState<FilterKey>("todos");
 
-  const filtered = useMemo(() => {
-    const rest = posts.filter((p) => p.slug !== featured.slug);
-    if (filter === "todos") return rest;
-    return posts.filter((p) => p.category === filter);
-  }, [posts, featured, filter]);
-
   const showFeatured = filter === "todos";
-  const gridPosts    = showFeatured ? filtered : filtered.filter((p) => p.slug !== featured.slug);
+
+  // The featured post is only pulled out of the grid when it's shown separately
+  // above (the "todos" view) — filtering by its own category must still list it.
+  const gridPosts = useMemo(() => {
+    const matching = filter === "todos" ? posts : posts.filter((p) => p.category === filter);
+    return showFeatured ? matching.filter((p) => p.slug !== featured.slug) : matching;
+  }, [posts, featured, filter, showFeatured]);
 
   return (
     <>
