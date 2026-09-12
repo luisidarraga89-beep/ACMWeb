@@ -4,11 +4,11 @@ import HomeClient from "@/components/sections/HomeClient";
 
 export const metadata: Metadata = {
   title: "ACM Hogares e Inversiones · Certeza en cada metro cuadrado.",
-  description: "Asesoría inmobiliaria honesta en Bogotá y la Sabana de Cundinamarca. Acompañamos a familias e inversionistas a tomar decisiones con claridad y respaldo real.",
+  description: "Asesoría inmobiliaria honesta en Bogotá y todo Cundinamarca. Acompañamos a familias e inversionistas a tomar decisiones con claridad y respaldo real.",
   alternates: { canonical: "https://acminhogares.com" },
   openGraph: {
     title: "ACM Hogares e Inversiones · Certeza en cada metro cuadrado.",
-    description: "Asesoría inmobiliaria honesta en Bogotá y la Sabana de Cundinamarca.",
+    description: "Asesoría inmobiliaria honesta en Bogotá y todo Cundinamarca.",
     images: [{ url: "/og/og-default.jpg", width: 1200, height: 630 }],
   },
 };

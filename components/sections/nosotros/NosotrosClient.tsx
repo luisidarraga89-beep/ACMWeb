@@ -74,7 +74,7 @@ export default function NosotrosClient() {
             </h1>
             <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-x-16 gap-y-8">
               <p className="font-sans text-cream/70" style={{ fontSize: TS.bodyLg, lineHeight: LH.body }}>
-                Somos ACM Hogares e Inversiones, una firma inmobiliaria con sede en Bogotá y operación en toda la Sabana de Cundinamarca. Ayudamos a familias e inversionistas a tomar decisiones inmobiliarias con claridad, respaldo y criterio real.
+                Somos ACM Hogares e Inversiones, una firma inmobiliaria con sede en Bogotá y operación en todo Cundinamarca. Ayudamos a familias e inversionistas a tomar decisiones inmobiliarias con claridad, respaldo y criterio real, y podemos gestionar propiedades en cualquier parte del país.
                 <br /><br />
                 Nuestro trabajo empieza mucho antes de una visita. Revisamos presupuesto, necesidades, opciones de crédito y zonas que realmente tengan sentido según cada objetivo — así evitamos pérdidas de tiempo, desplazamientos innecesarios y decisiones tomadas con presión.
                 <br /><br />

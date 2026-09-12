@@ -51,6 +51,7 @@ import { whatsappUrl } from "@/lib/config";
 import { getAllProperties } from "@/content/properties";
 import { getFeaturedTestimonials } from "@/content/testimonials";
 import type { Property } from "@/types/property";
+import PropertyStatusRibbon from "@/components/ui/PropertyStatusRibbon";
 
 /* ─────────────────────────────────────────────────────────────────────────
    TYPE SCALE
@@ -300,6 +301,7 @@ function PropertyCard({
   large?: boolean;
 }) {
   const image = property.images.find(i => i.isPrimary) ?? property.images[0];
+  const unavailable = property.status === "vendido" || property.status === "reservado";
   const badge = property.isNew ? "Nuevo" : property.status === "venta" ? "Venta" : "Arriendo";
 
   return (
@@ -315,7 +317,7 @@ function PropertyCard({
           alt={image.alt}
           fill
           className="object-cover transition-transform ease-out group-hover:scale-[1.026]"
-          style={{ transitionDuration: "1600ms" }}
+          style={{ transitionDuration: "1600ms", filter: unavailable ? "grayscale(0.5) brightness(0.85)" : undefined }}
           sizes={large ? "(max-width:1024px) 100vw, 56vw" : "(max-width:1024px) 100vw, 42vw"}
         />
       )}
@@ -329,23 +331,27 @@ function PropertyCard({
         aria-hidden="true"
       />
 
-      <span
-        className="absolute font-sans font-bold tracking-[0.1em] uppercase"
-        style={{
-          top: "1.125rem",
-          right: "1.125rem",
-          fontSize: "0.5625rem",
-          letterSpacing: LS.label,
-          background: property.isNew ? "#E8820C" : "rgba(15,32,68,0.55)",
-          color: property.isNew ? "#FBF8F4" : "rgba(251,248,244,0.82)",
-          padding: "0.28rem 0.6rem",
-          borderRadius: "2px",
-          backdropFilter: property.isNew ? undefined : "blur(4px)",
-          boxShadow: property.isNew ? "0 2px 8px rgba(232,130,12,0.4)" : undefined,
-        }}
-      >
-        {badge}
-      </span>
+      {unavailable && <PropertyStatusRibbon status={property.status as "vendido" | "reservado"} />}
+
+      {!unavailable && (
+        <span
+          className="absolute font-sans font-bold tracking-[0.1em] uppercase"
+          style={{
+            top: "1.125rem",
+            right: "1.125rem",
+            fontSize: "0.5625rem",
+            letterSpacing: LS.label,
+            background: property.isNew ? "#E8820C" : "rgba(15,32,68,0.55)",
+            color: property.isNew ? "#FBF8F4" : "rgba(251,248,244,0.82)",
+            padding: "0.28rem 0.6rem",
+            borderRadius: "2px",
+            backdropFilter: property.isNew ? undefined : "blur(4px)",
+            boxShadow: property.isNew ? "0 2px 8px rgba(232,130,12,0.4)" : undefined,
+          }}
+        >
+          {badge}
+        </span>
+      )}
 
       <div
         className="absolute bottom-0 left-0 right-0"
@@ -761,7 +767,7 @@ function ContactSection() {
                 lineHeight: LH.body,
               }}
             >
-              Bogotá · Cundinamarca · Sabana ·{" "}
+              Bogotá · Cundinamarca ·{" "}
               <span className="text-cream/30">acminhogares.com</span>
             </p>
           </Reveal>
