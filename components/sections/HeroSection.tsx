@@ -9,7 +9,7 @@
  * · Simplified video state — poster covers until video is ready
  * · Entry animation: one motion block, all children together
  *   The stagger was too theatrical. Now: single fade-up, 0.9s.
- * · Mobile: image fills the full viewport height correctly
+ * · Video autoplays on mobile too (skipped only under Data Saver)
  * · Text positioned lower on mobile (more breathing room above)
  * · CTA layout: stacks on mobile without gap inconsistency
  * · Removed unused `useScroll`/`useTransform` imports
@@ -51,30 +51,30 @@ export default function HeroSection({
   imageSrc  = "/images/hero-mobile.jpg",
   imageAlt  = "Arquitectura contemporánea — ACM Hogares e Inversiones",
 }: HeroSectionProps) {
-  const videoRef   = useRef<HTMLVideoElement>(null);
-  const [ready,    setReady]    = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const videoRef    = useRef<HTMLVideoElement>(null);
+  const [ready,      setReady]      = useState(false);
+  const [saveData,   setSaveData]   = useState(false);
 
-  /* Detect mobile on mount + resize */
+  /*
+    Respect the browser's Data Saver setting (Chrome/Android "Lite mode").
+    Everyone else — desktop and mobile alike — gets the video.
+  */
   useEffect(() => {
-    const mq      = window.matchMedia("(max-width: 767px)");
-    setIsMobile(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
+    const conn = (navigator as any).connection;
+    setSaveData(Boolean(conn?.saveData));
   }, []);
 
   /* Video: play when canplaythrough fires */
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || isMobile) return;
+    if (!video || saveData) return;
     const onReady = () => {
       setReady(true);
       video.play().catch(() => {/* autoplay blocked — poster shows */});
     };
     video.addEventListener("canplaythrough", onReady, { once: true });
     return () => video.removeEventListener("canplaythrough", onReady);
-  }, [isMobile]);
+  }, [saveData]);
 
   return (
     <section
@@ -89,8 +89,8 @@ export default function HeroSection({
       aria-label="ACM Hogares e Inversiones"
     >
 
-      {/* ── BACKGROUND: VIDEO (desktop) ─────────────────────────────────── */}
-      {!isMobile && (
+      {/* ── BACKGROUND: VIDEO (desktop + mobile) ─────────────────────────── */}
+      {!saveData && (
         <video
           ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover"
@@ -98,7 +98,6 @@ export default function HeroSection({
             opacity: ready ? 1 : 0,
             transition: "opacity 1.2s ease",
           }}
-          src={videoSrc}
           poster={imageSrc}
           autoPlay
           muted
@@ -107,13 +106,14 @@ export default function HeroSection({
           preload="auto"
           aria-hidden="true"
         >
+          {/* A `src` on <video> itself would short-circuit these — browser must pick between them */}
           <source src={videoSrc.replace(".mp4", ".webm")} type="video/webm" />
           <source src={videoSrc} type="video/mp4" />
         </video>
       )}
 
-      {/* ── BACKGROUND: IMAGE (mobile + video fallback) ─────────────────── */}
-      {(isMobile || !ready) && (
+      {/* ── BACKGROUND: IMAGE (data-saver mode + video fallback) ─────────── */}
+      {(saveData || !ready) && (
         <Image
           src={imageSrc}
           alt={imageAlt}
