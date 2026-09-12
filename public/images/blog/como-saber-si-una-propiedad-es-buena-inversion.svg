@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Ilustración editorial sobre análisis de inversión inmobiliaria">
+  <defs>
+    <linearGradient id="bgInvertir" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F2044"/>
+      <stop offset="100%" stop-color="#7A3F06"/>
+    </linearGradient>
+    <pattern id="dotsInvertir" width="38" height="38" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1.3" fill="rgba(255,255,255,0.10)"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bgInvertir)"/>
+  <rect width="1600" height="1000" fill="url(#dotsInvertir)"/>
+  <circle cx="1170" cy="420" r="330" fill="rgba(255,255,255,0.05)"/>
+
+  <!-- bar chart -->
+  <g transform="translate(970,270)">
+    <rect x="0"   y="230" width="70" height="150" rx="4" fill="rgba(251,248,244,0.35)"/>
+    <rect x="100" y="150" width="70" height="230" rx="4" fill="rgba(251,248,244,0.55)"/>
+    <rect x="200" y="60"  width="70" height="320" rx="4" fill="#E8820C"/>
+  </g>
+
+  <!-- trend line -->
+  <g stroke="#F5A033" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(960,300)">
+    <polyline points="10,300 110,220 210,260 320,60"/>
+    <polyline points="260,60 320,60 320,120"/>
+  </g>
+
+  <!-- building silhouette, faint -->
+  <g transform="translate(1230,330)" stroke="rgba(251,248,244,0.4)" stroke-width="5" fill="none">
+    <rect x="0" y="0" width="140" height="270"/>
+    <line x1="35" y1="40" x2="35" y2="70"/>
+    <line x1="70" y1="40" x2="70" y2="70"/>
+    <line x1="105" y1="40" x2="105" y2="70"/>
+    <line x1="35" y1="100" x2="35" y2="130"/>
+    <line x1="70" y1="100" x2="70" y2="130"/>
+    <line x1="105" y1="100" x2="105" y2="130"/>
+    <line x1="35" y1="160" x2="35" y2="190"/>
+    <line x1="70" y1="160" x2="70" y2="190"/>
+    <line x1="105" y1="160" x2="105" y2="190"/>
+  </g>
+
+  <text x="80" y="120" font-family="Georgia, serif" font-style="italic" font-size="44" fill="rgba(251,248,244,0.9)">ACM</text>
+  <text x="80" y="900" font-family="Arial, sans-serif" font-weight="700" font-size="26" letter-spacing="3" fill="rgba(251,248,244,0.55)">INVERTIR · ANÁLISIS DE OPORTUNIDADES</text>
+</svg>
