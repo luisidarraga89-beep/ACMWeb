@@ -79,7 +79,14 @@ export default function PropertyDetailPage({ params }: { params: { slug: string 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-x-16 gap-y-12">
             <div>
               <Reveal>
-                <p className="font-sans font-semibold text-orange-acm uppercase mb-3" style={{ fontSize: TS.caption, letterSpacing: LS.label }}>{property.neighborhood} · {property.city}</p>
+                <div className="flex items-center gap-3 mb-3">
+                  <p className="font-sans font-semibold text-orange-acm uppercase" style={{ fontSize: TS.caption, letterSpacing: LS.label }}>{property.neighborhood} · {property.city}</p>
+                  {property.isNew && (
+                    <span className="font-sans font-bold uppercase" style={{ fontSize: TS.caption, letterSpacing: LS.label, background: "#E8820C", color: "#FBF8F4", padding: "0.2rem 0.6rem", borderRadius: "2px" }}>
+                      Nuevo
+                    </span>
+                  )}
+                </div>
                 <h1 className="font-display italic text-navy-deep mb-3" style={{ fontSize: TS.displayLg, letterSpacing: LS.display, lineHeight: LH.display }}>{property.headline}</h1>
                 <p className="font-sans font-semibold text-graphite mb-8" style={{ fontSize: TS.bodyLg }}>{property.title}</p>
                 <div className="w-10 h-[3px] bg-orange-acm rounded-full mb-8" aria-hidden="true" />

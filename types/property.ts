@@ -34,6 +34,7 @@ export interface Property {
   images:       PropertyImage[];
   featured:     boolean;
   featuredOrder?:number;
+  isNew?:       boolean;     // Badge "Nuevo" — recién publicado
   investment:   boolean;
   acmSelection: boolean;     // Selección ACM — marcado por Christian o Juan Pablo
   tags:         string[];

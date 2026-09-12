@@ -47,6 +47,12 @@ function PropertyCard({ property, large = false }: { property: Property; large?:
         {property.status === "venta" ? "Venta" : "Arriendo"}
       </span>
 
+      {property.isNew && (
+        <span className="absolute font-sans font-bold uppercase" style={{ top: "1rem", left: "1rem", fontSize: TS.caption, letterSpacing: LS.label, background: "#E8820C", color: "#FBF8F4", padding: "0.3rem 0.7rem", borderRadius: "2px", boxShadow: "0 2px 8px rgba(232,130,12,0.4)" }}>
+          Nuevo
+        </span>
+      )}
+
       <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6">
         <p className="font-sans text-cream/55 uppercase mb-1.5" style={{ fontSize: TS.caption, letterSpacing: LS.data }}>{property.neighborhood} · {property.city}</p>
         <h3 className="font-display italic text-cream mb-1.5" style={{ fontSize: "1.125rem", lineHeight: LH.display, letterSpacing: LS.display }}>{property.title}</h3>

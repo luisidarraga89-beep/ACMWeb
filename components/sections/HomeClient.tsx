@@ -526,12 +526,21 @@ function InversionesSection() {
 ───────────────────────────────────────────────────────────────────────── */
 const PROPERTIES = [
   {
-    slug:     "alameda-san-antonio",
-    label:    "Usaquén · Bogotá",
-    title:    "Alameda San Antonio II",
+    slug:     "balcones-de-san-carlos",
+    label:    "Lijacá · Usaquén · Bogotá",
+    title:    "Balcones de San Carlos",
     area:     "67 m²",
-    image:    "/images/properties/alameda-san-antonio/01.webp",
-    tag:      "Venta",
+    image:    "/images/properties/balcones-san-carlos/01.webp",
+    tag:      "Nuevo",
+    position: "object-center",
+  },
+  {
+    slug:     "caminos-del-norte",
+    label:    "Tibabita · Usaquén · Bogotá",
+    title:    "Caminos del Norte",
+    area:     "49 m²",
+    image:    "/images/properties/caminos-del-norte/01.webp",
+    tag:      "Nuevo",
     position: "object-center",
   },
   {
@@ -540,15 +549,6 @@ const PROPERTIES = [
     title:    "Altos de San Jorge",
     area:     "56 m²",
     image:    "/images/properties/altos-san-jorge/01.webp",
-    tag:      "Venta",
-    position: "object-center",
-  },
-  {
-    slug:     "viantt-cajica",
-    label:    "Cajicá · Cundinamarca",
-    title:    "Viantt Apartamentos",
-    area:     "46 m²",
-    image:    "/images/properties/viantt/01.webp",
     tag:      "Venta",
     position: "object-center",
   },
@@ -591,16 +591,18 @@ function PropertyCard({
       />
 
       <span
-        className="absolute font-sans font-semibold tracking-[0.1em] uppercase backdrop-blur-sm"
+        className="absolute font-sans font-bold tracking-[0.1em] uppercase"
         style={{
           top: "1.125rem",
           right: "1.125rem",
           fontSize: "0.5625rem",
           letterSpacing: LS.label,
-          background: "rgba(15,32,68,0.55)",
-          color: "rgba(251,248,244,0.82)",
+          background: property.tag === "Nuevo" ? "#E8820C" : "rgba(15,32,68,0.55)",
+          color: property.tag === "Nuevo" ? "#FBF8F4" : "rgba(251,248,244,0.82)",
           padding: "0.28rem 0.6rem",
           borderRadius: "2px",
+          backdropFilter: property.tag === "Nuevo" ? undefined : "blur(4px)",
+          boxShadow: property.tag === "Nuevo" ? "0 2px 8px rgba(232,130,12,0.4)" : undefined,
         }}
       >
         {property.tag}
