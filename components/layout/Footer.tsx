@@ -115,7 +115,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2.5">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-orange-acm shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                <span className="font-sans text-sm text-cream/65">{siteConfig.contact.city}</span>
+                <span className="font-sans text-sm text-navy-deep/65">{siteConfig.contact.address}</span>
               </li>
             </ul>
             <a href={siteConfig.social.whatsapp} target="_blank" rel="noopener noreferrer"
