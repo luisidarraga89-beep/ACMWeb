@@ -5,9 +5,9 @@ export const siteConfig = {
   locale:  "es-CO",
 
   contact: {
-    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "573227340446",
+    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "573115480859",
     email:    process.env.NEXT_PUBLIC_CONTACT_EMAIL   ?? "christian@acminhogares.com",
-    phone:    process.env.NEXT_PUBLIC_PHONE           ?? "+57 322 734 0446",
+    phone:    process.env.NEXT_PUBLIC_PHONE           ?? "+57 311 548 0859",
     city:     "Bogotá, Colombia",
   },
 
@@ -15,7 +15,7 @@ export const siteConfig = {
     instagram: "https://www.instagram.com/acmproperty12",
     facebook:  "https://www.facebook.com/profile.php?id=61552925627486",
     linkedin:  "https://www.linkedin.com/company/acminhogares",
-    whatsapp:  "https://wa.me/573227340446",
+    whatsapp:  "https://wa.me/573115480859",
   },
 
   analytics: {
