@@ -45,7 +45,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { whatsappUrl } from "@/lib/config";
 import { getAllProperties } from "@/content/properties";
@@ -570,13 +570,28 @@ function ProcessSection() {
 ───────────────────────────────────────────────────────────────────────── */
 function TestimonialsSection() {
   const testimonials = getFeaturedTestimonials();
-  const [index, setIndex] = useState(0);
-  const [dir,   setDir]   = useState(0);
+  const [index,  setIndex]  = useState(0);
+  const [dir,    setDir]    = useState(0);
+  const [paused, setPaused] = useState(false);
 
   const go = (next: number) => {
     setDir(next > index ? 1 : -1);
     setIndex((next + testimonials.length) % testimonials.length);
   };
+
+  /*
+    Avanza solo cada 7s — se detiene mientras el visitante interactúa
+    (hover/foco). Se reinicia el conteo con cada cambio de índice, sea
+    automático o manual (flechas/puntos), para que nunca avance "doble".
+  */
+  useEffect(() => {
+    if (paused || testimonials.length <= 1) return;
+    const timer = setTimeout(() => {
+      setDir(1);
+      setIndex((i) => (i + 1) % testimonials.length);
+    }, 7000);
+    return () => clearTimeout(timer);
+  }, [paused, index, testimonials.length]);
 
   const t = testimonials[index];
 
@@ -616,7 +631,14 @@ function TestimonialsSection() {
           </div>
         </Reveal>
 
-        <div className="relative overflow-hidden" style={{ minHeight: "clamp(13rem, 24vw, 16rem)" }}>
+        <div
+          className="relative overflow-hidden"
+          style={{ minHeight: "clamp(13rem, 24vw, 16rem)" }}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
+        >
           <AnimatePresence mode="wait" custom={dir}>
             <motion.figure
               key={t._id}
@@ -635,6 +657,10 @@ function TestimonialsSection() {
                   lineHeight: LH.tight,
                   maxWidth: "42em",
                   marginBottom: "1.25rem",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 4,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
                 }}
               >
                 <span className="text-orange-acm" aria-hidden="true">"</span>
