@@ -62,7 +62,7 @@ const FACTORES = [
 
 function FactoresSection() {
   return (
-    <section className="bg-white" style={{ paddingBlock: SP.section }}>
+    <section id="factores" className="bg-white scroll-mt-24" style={{ paddingBlock: SP.section }}>
       <div className="container-acm">
         <Reveal>
           <SectionLabel>No todas las propiedades son una buena inversión</SectionLabel>
@@ -109,7 +109,7 @@ const VALUE_WAYS = [
 
 function ValueSection() {
   return (
-    <section className="bg-cream" style={{ paddingBlock: SP.section }}>
+    <section id="como-genera-valor" className="bg-cream scroll-mt-24" style={{ paddingBlock: SP.section }}>
       <div className="container-acm">
         <Reveal>
           <SectionLabel>¿Cómo genera valor una propiedad?</SectionLabel>
@@ -153,7 +153,7 @@ const PORTFOLIO_EXAMPLE = [
 
 function DiversifySection() {
   return (
-    <section className="bg-navy-deep relative overflow-hidden" style={{ paddingBlock: SP.section }}>
+    <section id="diversificar" className="bg-navy-deep relative overflow-hidden scroll-mt-24" style={{ paddingBlock: SP.section }}>
       <DotGrid />
       <div className="container-acm relative">
         <Reveal>
@@ -284,7 +284,7 @@ const PROCESS_STEPS = [
 
 function ProcessSection() {
   return (
-    <section className="bg-white" style={{ paddingBlock: SP.section }}>
+    <section id="proceso" className="bg-white scroll-mt-24" style={{ paddingBlock: SP.section }}>
       <div className="container-acm">
         <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-x-16 xl:gap-x-24 gap-y-10">
           <Reveal className="lg:sticky lg:top-36 lg:self-start">
@@ -416,7 +416,7 @@ const RENTAL_SERVICES = [
 
 function RentalManagementSection() {
   return (
-    <section className="bg-navy-deep relative overflow-hidden" style={{ paddingBlock: SP.section }}>
+    <section id="gestion-alquileres" className="bg-navy-deep relative overflow-hidden scroll-mt-24" style={{ paddingBlock: SP.section }}>
       <DotGrid />
       <div className="container-acm relative">
         <Reveal className="max-w-3xl">
@@ -493,7 +493,7 @@ const INTL_STEPS = ["Búsqueda", "Análisis", "Visitas", "Negociación", "Proces
 
 function InternationalSection() {
   return (
-    <section id="internacional" className="bg-white" style={{ paddingBlock: SP.section }}>
+    <section id="internacional" className="bg-white scroll-mt-24" style={{ paddingBlock: SP.section }}>
       <div className="container-acm">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-10 items-start">
           <Reveal>
@@ -588,7 +588,7 @@ function OpportunitiesSection() {
   const opportunities = getInvestmentProperties().slice(0, 4);
 
   return (
-    <section id="oportunidades" className="bg-white" style={{ paddingBlock: SP.section }}>
+    <section id="oportunidades" className="bg-white scroll-mt-24" style={{ paddingBlock: SP.section }}>
       <div className="container-acm">
         <Reveal>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-10 md:mb-12">

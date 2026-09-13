@@ -167,7 +167,8 @@ function Rule() {
 function HogaresSection() {
   return (
     <section
-      className="bg-white overflow-hidden"
+      id="hogares"
+      className="bg-white overflow-hidden scroll-mt-24"
       style={{ paddingBlock: SP.section }}
       aria-labelledby="hogares-heading"
     >
@@ -398,7 +399,8 @@ function PropertiesSection() {
 
   return (
     <section
-      className="bg-cream"
+      id="destacadas"
+      className="bg-cream scroll-mt-24"
       style={{ paddingBlock: SP.section }}
       aria-labelledby="properties-heading"
     >
@@ -478,7 +480,8 @@ const STEPS = [
 function ProcessSection() {
   return (
     <section
-      className="bg-white"
+      id="como-trabajamos"
+      className="bg-white scroll-mt-24"
       style={{ paddingBlock: SP.section }}
       aria-labelledby="process-heading"
     >
@@ -579,7 +582,8 @@ function TestimonialsSection() {
 
   return (
     <section
-      className="bg-cream"
+      id="testimonios"
+      className="bg-cream scroll-mt-24"
       style={{ paddingBlock: SP.section }}
       aria-labelledby="testimonials-heading"
     >
@@ -682,7 +686,8 @@ function TestimonialsSection() {
 function ContactSection() {
   return (
     <section
-      className="bg-navy-deep relative overflow-hidden"
+      id="hablemos"
+      className="bg-navy-deep relative overflow-hidden scroll-mt-24"
       style={{ paddingBlock: SP.section }}
       aria-labelledby="contact-heading"
     >

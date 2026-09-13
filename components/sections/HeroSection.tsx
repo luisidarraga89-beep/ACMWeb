@@ -161,14 +161,6 @@ export default function HeroSection({
           style={{ maxWidth: "42rem" }}
         >
 
-          {/* Geo label */}
-          <p
-            className="font-sans font-semibold text-orange-acm uppercase tracking-[0.14em]"
-            style={{ fontSize: "0.6875rem", marginBottom: "1.25rem" }}
-          >
-            Bogotá · Cundinamarca
-          </p>
-
           {/* Headline — Lora italic, display size */}
           <h1
             className="font-display italic text-white"
@@ -184,7 +176,7 @@ export default function HeroSection({
 
           {/* Subcopy */}
           <p
-            className="font-sans text-cream/72"
+            className="font-sans text-cream/90"
             style={{
               fontSize: "clamp(0.9375rem, 1.6vw, 1.0625rem)",
               lineHeight: "1.72",
@@ -192,8 +184,7 @@ export default function HeroSection({
               marginBottom: "clamp(1.75rem, 4vw, 2.5rem)",
             }}
           >
-            Acompañamiento inmobiliario para hogares e inversiones
-            en Bogotá y todo Cundinamarca.
+            Acompañamiento inmobiliario para hogares e inversiones.
           </p>
 
         </motion.div>

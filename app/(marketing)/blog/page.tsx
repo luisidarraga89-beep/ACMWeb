@@ -9,9 +9,9 @@ export const metadata: Metadata = buildMetadata({
   path:        "/blog",
 });
 
-export default function BlogPage() {
+export default function BlogPage({ searchParams }: { searchParams: { categoria?: string } }) {
   const posts    = getAllBlogPosts();
   const featured = getFeaturedBlogPost();
 
-  return <BlogListingClient posts={posts} featured={featured} />;
+  return <BlogListingClient posts={posts} featured={featured} initialCategory={searchParams.categoria} />;
 }
