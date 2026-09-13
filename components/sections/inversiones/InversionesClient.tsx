@@ -7,6 +7,7 @@ import { motion, useInView } from "framer-motion";
 import { getInvestmentProperties } from "@/content/properties";
 import { TS, LH, LS, SP, EASE } from "@/lib/design-tokens";
 import { whatsappUrl } from "@/lib/config";
+import { PROPERTY_TYPE_LABEL } from "@/lib/property-labels";
 
 /* ─── SHARED PRIMITIVES ──────────────────────────────────────────────────── */
 
@@ -579,11 +580,6 @@ function EducationSection() {
 }
 
 /* ─── §11 OPORTUNIDADES DE INVERSIÓN ─────────────────────────────────────── */
-const TYPE_LABEL: Record<string, string> = {
-  apartamento: "Apartamento", casa: "Casa", penthouse: "Penthouse",
-  duplex: "Dúplex", lote: "Lote", oficina: "Oficina", local: "Local",
-};
-
 function OpportunitiesSection() {
   const opportunities = getInvestmentProperties().slice(0, 4);
 
@@ -618,7 +614,7 @@ function OpportunitiesSection() {
                     )}
                   </div>
                   <p className="font-sans font-medium text-graphite/60 uppercase mb-1" style={{ fontSize: TS.caption, letterSpacing: LS.data }}>
-                    {p.city} · {TYPE_LABEL[p.type] ?? p.type}
+                    {p.city} · {PROPERTY_TYPE_LABEL[p.type]}
                   </p>
                   <h3 className="font-sans font-bold text-navy-deep mb-1" style={{ fontSize: TS.bodySm }}>{p.title}</h3>
                   {p.priceDisplay && (

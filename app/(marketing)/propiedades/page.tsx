@@ -7,13 +7,13 @@ import { motion, useInView } from "framer-motion";
 import { getAllProperties } from "@/content/properties";
 import { TS, LH, LS, SP, EASE } from "@/lib/design-tokens";
 import { whatsappUrl } from "@/lib/config";
-import { Property, PropertyType } from "@/types/property";
+import { Property, PropertyType, PropertyCondition, PropertyAmenity } from "@/types/property";
+import { PROPERTY_TYPE_LABEL, PROPERTY_CONDITION_LABEL, PROPERTY_AMENITY_LABEL } from "@/lib/property-labels";
+import { COLOMBIA_LOCATIONS, getCitiesByDepartment } from "@/content/colombia-locations";
 import PropertyStatusRibbon from "@/components/ui/PropertyStatusRibbon";
 
-const TYPE_LABEL: Record<PropertyType, string> = {
-  apartamento: "Apartamento", casa: "Casa", penthouse: "Penthouse",
-  duplex: "Dúplex", lote: "Lote", oficina: "Oficina", local: "Local",
-};
+const ALL_TYPES: PropertyType[] = Object.keys(PROPERTY_TYPE_LABEL) as PropertyType[];
+const ALL_AMENITIES: PropertyAmenity[] = Object.keys(PROPERTY_AMENITY_LABEL) as PropertyAmenity[];
 
 const MIN_OPTIONS = [0, 1, 2, 3, 4] as const;
 
@@ -117,26 +117,88 @@ function ChipGroup({
   );
 }
 
+/* ─── MULTI-SELECT CHIP GROUP (tipo de inmueble) ─────────────────────────── */
+function MultiChipGroup<T extends string>({
+  values, onToggle, options, labels,
+}: {
+  values: T[];
+  onToggle: (v: T) => void;
+  options: T[];
+  labels: Record<T, string>;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((opt) => {
+        const active = values.includes(opt);
+        return (
+          <button
+            key={opt}
+            type="button"
+            onClick={() => onToggle(opt)}
+            aria-pressed={active}
+            className="font-sans font-medium rounded-full transition-all duration-200"
+            style={{
+              fontSize: TS.caption,
+              padding: "0.45rem 0.9rem",
+              border: active ? "1.5px solid #E8820C" : "1.5px solid rgba(15,32,68,0.15)",
+              background: active ? "rgba(232,130,12,0.08)" : "#fff",
+              color: active ? "#E8820C" : "rgba(15,32,68,0.65)",
+            }}
+          >
+            {labels[opt]}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ─── AMENITY CHECKBOX GRID (características) ────────────────────────────── */
+function AmenityGrid({
+  values, onToggle,
+}: {
+  values: PropertyAmenity[];
+  onToggle: (v: PropertyAmenity) => void;
+}) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-3">
+      {ALL_AMENITIES.map((a) => (
+        <label key={a} className="flex items-center gap-2.5 font-sans text-navy-deep/75 cursor-pointer" style={{ fontSize: TS.bodySm }}>
+          <input type="checkbox" checked={values.includes(a)} onChange={() => onToggle(a)} className="w-4 h-4 accent-orange-acm shrink-0" />
+          {PROPERTY_AMENITY_LABEL[a]}
+        </label>
+      ))}
+    </div>
+  );
+}
+
 /* ─── FILTERS PANEL ──────────────────────────────────────────────────────── */
 function PropertyFilters({
-  properties, filters, setFilters, resultCount,
+  filters, setFilters, resultCount,
 }: {
-  properties: Property[];
   filters: ReturnType<typeof useFilterState>[0];
   setFilters: ReturnType<typeof useFilterState>[1];
   resultCount: number;
 }) {
-  const cities = useMemo(() => Array.from(new Set(properties.map(p => p.city))).sort(), [properties]);
-  const types  = useMemo(() => Array.from(new Set(properties.map(p => p.type))).sort(), [properties]);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const set = <K extends keyof typeof filters>(key: K, value: (typeof filters)[K]) =>
     setFilters(f => ({ ...f, [key]: value }));
 
+  const toggleType = (t: PropertyType) =>
+    setFilters(f => ({ ...f, types: f.types.includes(t) ? f.types.filter(x => x !== t) : [...f.types, t] }));
+
+  const toggleAmenity = (a: PropertyAmenity) =>
+    setFilters(f => ({ ...f, amenities: f.amenities.includes(a) ? f.amenities.filter(x => x !== a) : [...f.amenities, a] }));
+
+  const cityOptions = filters.department === "todos" ? [] : getCitiesByDepartment(filters.department);
+
   const isDefault =
-    !filters.q && filters.city === "todas" && filters.type === "todos" && filters.operation === "todas" &&
+    !filters.q && filters.department === "todos" && filters.city === "todas" &&
+    filters.types.length === 0 && filters.operation === "todas" && filters.condition === "cualquiera" &&
     filters.minBeds === 0 && filters.minBaths === 0 && filters.minParking === 0 &&
     !filters.priceMin && !filters.priceMax && !filters.areaMin && !filters.areaMax &&
-    !filters.hideUnavailable && filters.sortBy === "recientes";
+    filters.amenities.length === 0 && !filters.hideUnavailable && filters.sortBy === "recientes";
 
   return (
     <div className="bg-white border border-graphite/10 rounded-lg p-6 md:p-8 mb-10">
@@ -177,22 +239,40 @@ function PropertyFilters({
         </div>
       </div>
 
-      {/* City + type */}
+      {/* Departamento + Ciudad (cascada) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
         <div>
-          <label htmlFor="pf-city" className="block font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Ciudad</label>
-          <select id="pf-city" className="input-acm" value={filters.city} onChange={(e) => set("city", e.target.value)}>
-            <option value="todas">Todas las ciudades</option>
-            {cities.map((c) => <option key={c} value={c}>{c}</option>)}
+          <label htmlFor="pf-dept" className="block font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Departamento</label>
+          <select
+            id="pf-dept"
+            className="input-acm"
+            value={filters.department}
+            onChange={(e) => setFilters(f => ({ ...f, department: e.target.value, city: "todas" }))}
+          >
+            <option value="todos">Todos los departamentos</option>
+            {COLOMBIA_LOCATIONS.map((d) => <option key={d.name} value={d.name}>{d.name}</option>)}
           </select>
         </div>
         <div>
-          <label htmlFor="pf-type" className="block font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Tipo de inmueble</label>
-          <select id="pf-type" className="input-acm" value={filters.type} onChange={(e) => set("type", e.target.value)}>
-            <option value="todos">Todos los tipos</option>
-            {types.map((t) => <option key={t} value={t}>{TYPE_LABEL[t]}</option>)}
+          <label htmlFor="pf-city" className="block font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Ciudad</label>
+          <select
+            id="pf-city"
+            className="input-acm"
+            value={filters.city}
+            onChange={(e) => set("city", e.target.value)}
+            disabled={filters.department === "todos"}
+            style={filters.department === "todos" ? { opacity: 0.5, cursor: "not-allowed" } : undefined}
+          >
+            <option value="todas">{filters.department === "todos" ? "Elige primero un departamento" : "Todas las ciudades"}</option>
+            {cityOptions.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
+      </div>
+
+      {/* Tipo de inmueble */}
+      <div className="mb-6">
+        <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Tipo de inmueble</p>
+        <MultiChipGroup values={filters.types} onToggle={toggleType} options={ALL_TYPES} labels={PROPERTY_TYPE_LABEL} />
       </div>
 
       {/* Beds / baths / parking */}
@@ -202,25 +282,73 @@ function PropertyFilters({
         <ChipGroup label="Parqueaderos" value={filters.minParking} onChange={(v) => set("minParking", v)} options={MIN_OPTIONS.slice(0, 3)} />
       </div>
 
-      {/* Price + area ranges */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
-        <div>
-          <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Precio (COP)</p>
-          <div className="flex items-center gap-2.5">
-            <input type="number" min={0} placeholder="Mínimo" className="input-acm" value={filters.priceMin} onChange={(e) => set("priceMin", e.target.value)} />
-            <span className="text-graphite/40 shrink-0">—</span>
-            <input type="number" min={0} placeholder="Máximo" className="input-acm" value={filters.priceMax} onChange={(e) => set("priceMax", e.target.value)} />
-          </div>
-        </div>
-        <div>
-          <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Área (m²)</p>
-          <div className="flex items-center gap-2.5">
-            <input type="number" min={0} placeholder="Mínimo" className="input-acm" value={filters.areaMin} onChange={(e) => set("areaMin", e.target.value)} />
-            <span className="text-graphite/40 shrink-0">—</span>
-            <input type="number" min={0} placeholder="Máximo" className="input-acm" value={filters.areaMax} onChange={(e) => set("areaMax", e.target.value)} />
-          </div>
+      {/* Price */}
+      <div className="mb-2">
+        <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Precio (COP)</p>
+        <div className="flex items-center gap-2.5 max-w-xl">
+          <input type="number" min={0} placeholder="Mínimo" className="input-acm" value={filters.priceMin} onChange={(e) => set("priceMin", e.target.value)} />
+          <span className="text-graphite/40 shrink-0">—</span>
+          <input type="number" min={0} placeholder="Máximo" className="input-acm" value={filters.priceMax} onChange={(e) => set("priceMax", e.target.value)} />
         </div>
       </div>
+
+      {/* Toggle advanced */}
+      <button
+        type="button"
+        onClick={() => setShowAdvanced(s => !s)}
+        className="flex items-center gap-2 font-sans font-semibold text-orange-acm mt-4 mb-2"
+        style={{ fontSize: TS.bodySm }}
+        aria-expanded={showAdvanced}
+      >
+        {showAdvanced ? "Menos filtros" : "Más filtros"}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 transition-transform duration-200" style={{ transform: showAdvanced ? "rotate(180deg)" : "rotate(0deg)" }} aria-hidden="true">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+
+      {showAdvanced && (
+        <div className="pt-4 mb-2 border-t border-graphite/10">
+          {/* Situación de la vivienda */}
+          <div className="mb-6">
+            <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Situación de la vivienda</p>
+            <div className="flex gap-2">
+              {(["cualquiera", "nueva", "usada"] as const).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => set("condition", c)}
+                  className="font-sans font-medium rounded-full transition-all duration-200 whitespace-nowrap"
+                  style={{
+                    fontSize: TS.caption,
+                    padding: "0.6rem 1.1rem",
+                    border: filters.condition === c ? "1.5px solid #E8820C" : "1.5px solid rgba(15,32,68,0.15)",
+                    background: filters.condition === c ? "rgba(232,130,12,0.08)" : "#fff",
+                    color: filters.condition === c ? "#E8820C" : "rgba(15,32,68,0.65)",
+                  }}
+                >
+                  {c === "cualquiera" ? "Cualquiera" : PROPERTY_CONDITION_LABEL[c]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Área */}
+          <div className="mb-6">
+            <p className="font-sans font-medium text-navy-deep mb-2" style={{ fontSize: TS.bodySm }}>Área (m²)</p>
+            <div className="flex items-center gap-2.5 max-w-xl">
+              <input type="number" min={0} placeholder="Mínimo" className="input-acm" value={filters.areaMin} onChange={(e) => set("areaMin", e.target.value)} />
+              <span className="text-graphite/40 shrink-0">—</span>
+              <input type="number" min={0} placeholder="Máximo" className="input-acm" value={filters.areaMax} onChange={(e) => set("areaMax", e.target.value)} />
+            </div>
+          </div>
+
+          {/* Características */}
+          <div className="mb-2">
+            <p className="font-sans font-medium text-navy-deep mb-3" style={{ fontSize: TS.bodySm }}>Características</p>
+            <AmenityGrid values={filters.amenities} onToggle={toggleAmenity} />
+          </div>
+        </div>
+      )}
 
       {/* Sort + availability + clear */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 pt-6" style={{ borderTop: "1px solid rgba(90,98,120,0.1)" }}>
@@ -264,9 +392,11 @@ function PropertyFilters({
 function defaultFilters() {
   return {
     q: "",
+    department: "todos",
     city: "todas",
-    type: "todos",
+    types: [] as PropertyType[],
     operation: "todas" as "todas" | "venta" | "arriendo",
+    condition: "cualquiera" as "cualquiera" | PropertyCondition,
     minBeds: 0,
     minBaths: 0,
     minParking: 0,
@@ -274,6 +404,7 @@ function defaultFilters() {
     priceMax: "",
     areaMin: "",
     areaMax: "",
+    amenities: [] as PropertyAmenity[],
     hideUnavailable: false,
     sortBy: "recientes" as SortKey,
   };
@@ -307,9 +438,11 @@ export default function PropiedadesPage() {
         const haystack = `${p.title} ${p.neighborhood} ${p.city}`.toLowerCase();
         if (!haystack.includes(q)) return false;
       }
+      if (filters.department !== "todos" && p.department !== filters.department) return false;
       if (filters.city !== "todas" && p.city !== filters.city) return false;
-      if (filters.type !== "todos" && p.type !== filters.type) return false;
+      if (filters.types.length > 0 && !filters.types.includes(p.type)) return false;
       if (filters.operation !== "todas" && p.status !== filters.operation) return false;
+      if (filters.condition !== "cualquiera" && p.condition !== filters.condition) return false;
       if (filters.minBeds > 0 && (p.bedrooms ?? 0) < filters.minBeds) return false;
       if (filters.minBaths > 0 && (p.bathrooms ?? 0) < filters.minBaths) return false;
       if (filters.minParking > 0 && (p.parking ?? 0) < filters.minParking) return false;
@@ -318,6 +451,7 @@ export default function PropiedadesPage() {
       const area = parseArea(p.area);
       if (filters.areaMin && area < Number(filters.areaMin)) return false;
       if (filters.areaMax && area > Number(filters.areaMax)) return false;
+      if (filters.amenities.length > 0 && !filters.amenities.every((a) => p.amenities?.includes(a))) return false;
       if (filters.hideUnavailable && (p.status === "vendido" || p.status === "reservado")) return false;
       return true;
     });
@@ -355,7 +489,7 @@ export default function PropiedadesPage() {
       <section id="filtros" className="bg-cream scroll-mt-24" style={{ paddingBlock: SP.section }}>
         <div className="container-acm">
           <Reveal>
-            <PropertyFilters properties={properties} filters={filters} setFilters={setFilters} resultCount={filtered.length} />
+            <PropertyFilters filters={filters} setFilters={setFilters} resultCount={filtered.length} />
           </Reveal>
 
           {filtered.length > 0 ? (
