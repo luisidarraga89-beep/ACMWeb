@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ACMLogo from "@/components/icons/ACMLogo";
 import { siteConfig } from "@/lib/config";
+import CookieSettingsLink from "@/components/analytics/CookieSettingsLink";
 
 const FOOTER_SERVICES = [
   { label: "Comprar vivienda",        href: "/propiedades" },
@@ -122,6 +123,7 @@ export default function Footer() {
           <nav aria-label="Navegación legal" className="flex items-center gap-5">
             <Link href="/privacidad" className="font-sans text-xs text-graphite/40 hover:text-navy-deep/60 transition-colors duration-200 focus-visible:outline-orange-acm rounded">Política de privacidad</Link>
             <Link href="/terminos" className="font-sans text-xs text-graphite/40 hover:text-navy-deep/60 transition-colors duration-200 focus-visible:outline-orange-acm rounded">Términos de uso</Link>
+            <CookieSettingsLink className="font-sans text-xs text-graphite/40 hover:text-navy-deep/60 transition-colors duration-200 focus-visible:outline-orange-acm rounded" />
           </nav>
         </div>
       </div>

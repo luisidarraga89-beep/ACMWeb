@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WhatsAppFAB from "@/components/layout/WhatsAppFAB";
+import CookieConsent from "@/components/analytics/CookieConsent";
+import AnalyticsScripts from "@/components/analytics/AnalyticsScripts";
 
 const loraFont = Lora({ subsets: ["latin"], weight: ["400","500","600"], style: ["normal","italic"], variable: "--font-lora", display: "swap" });
 const jakartaFont = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["300","400","500","600","700","800"], variable: "--font-jakarta", display: "swap" });
@@ -26,6 +28,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="flex flex-col min-h-screen">{children}</div>
         <Footer />
         <WhatsAppFAB delaySeconds={8} />
+        <CookieConsent />
+        <AnalyticsScripts />
       </body>
     </html>
   );
