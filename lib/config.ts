@@ -20,8 +20,9 @@ export const siteConfig = {
   },
 
   analytics: {
-    ga4Id:       process.env.NEXT_PUBLIC_GA4_ID        ?? "",
-    metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "",
+    ga4Id:       process.env.NEXT_PUBLIC_GA4_ID         ?? "",
+    googleAdsId: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID  ?? "",
+    metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID  ?? "",
   },
 } as const;
 

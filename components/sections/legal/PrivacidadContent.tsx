@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SP } from "@/lib/design-tokens";
 import { H2, P, UL, InfoBox, DataTable, Divider } from "@/components/ui/Prose";
 import { siteConfig } from "@/lib/config";
+import CookieSettingsLink from "@/components/analytics/CookieSettingsLink";
 import LegalHeader from "./LegalHeader";
 
 export default function PrivacidadContent() {
@@ -116,12 +117,25 @@ export default function PrivacidadContent() {
 
           <H2 id="transferencia">8. Transferencia y transmisión de datos</H2>
           <P>
-            ACM no vende ni comparte tus datos personales con terceros para fines comerciales ajenos a nuestra actividad. Podemos compartir datos con proveedores tecnológicos que nos prestan servicios de hosting, correo electrónico o mensajería (como WhatsApp Business), quienes actúan como encargados del tratamiento bajo nuestras instrucciones, o cuando así lo exija una autoridad competente en ejercicio de sus funciones legales.
+            ACM no vende tus datos personales. Podemos compartir datos con proveedores tecnológicos que nos prestan servicios bajo nuestras instrucciones, actuando como encargados del tratamiento, entre ellos: hosting y correo electrónico, mensajería (WhatsApp Business), y — únicamente si aceptas las cookies analíticas o publicitarias descritas en la sección 9 — herramientas de medición como Google Analytics, Google Ads o Meta (Facebook) para entender el uso del sitio y el resultado de nuestras campañas. También podemos compartir datos cuando así lo exija una autoridad competente en ejercicio de sus funciones legales.
           </P>
 
           <H2 id="cookies">9. Uso de cookies</H2>
           <P>
-            Este sitio puede utilizar cookies propias y de terceros (por ejemplo, herramientas de analítica web) para entender cómo se usa el sitio y mejorar tu experiencia de navegación. Puedes deshabilitar o eliminar las cookies desde la configuración de tu navegador en cualquier momento, aunque esto podría afectar algunas funciones del sitio.
+            Este sitio utiliza cookies propias y de terceros. Al ingresar por primera vez verás un aviso donde puedes aceptarlas o rechazarlas; las cookies de análisis y publicidad solo se activan si las aceptas, y puedes cambiar tu elección en cualquier momento desde{" "}
+            <CookieSettingsLink className="text-navy-deep font-semibold underline underline-offset-4 decoration-orange-acm/50 hover:decoration-orange-acm" />{" "}
+            o desde la configuración de tu navegador.
+          </P>
+          <DataTable
+            headers={["Tipo", "Para qué se usan"]}
+            rows={[
+              ["Necesarias", "Permiten el funcionamiento básico del sitio. No requieren autorización y no se pueden desactivar."],
+              ["Analíticas", "Nos ayudan a entender cómo se usa el sitio (por ejemplo, con Google Analytics), para mejorarlo."],
+              ["Publicitarias", "Miden el resultado de nuestras campañas (por ejemplo, con Google Ads o Meta/Facebook) y permiten mostrarte anuncios relevantes."],
+            ]}
+          />
+          <P>
+            Las cookies analíticas y publicitarias solo se activan cuando aceptas el aviso de cookies; si lo rechazas, ACM no las utiliza.
           </P>
 
           <H2 id="seguridad">10. Seguridad de la información</H2>
