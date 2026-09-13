@@ -1,7 +1,8 @@
 /**
- * components/blog/BlogProse.tsx
- * Shared editorial primitives for blog article bodies — keeps every article
- * visually consistent without duplicating typography rules per file.
+ * components/ui/Prose.tsx
+ * Shared long-form editorial primitives — used by blog articles and legal
+ * pages (Política de privacidad, Términos de uso) so every reading-heavy
+ * page shares the same typography instead of duplicating it per file.
  */
 import { TS, LH, LS, SP } from "@/lib/design-tokens";
 

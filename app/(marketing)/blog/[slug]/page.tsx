@@ -10,7 +10,7 @@ import { siteConfig } from "@/lib/config";
 import { formatDate } from "@/lib/utils";
 import { TS, LH, LS } from "@/lib/design-tokens";
 import CategoryTag from "@/components/blog/CategoryTag";
-import Breadcrumbs from "@/components/blog/Breadcrumbs";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import ShareBar from "@/components/blog/ShareBar";
 import AuthorBox from "@/components/blog/AuthorBox";
 import RelatedArticles from "@/components/blog/RelatedArticles";
