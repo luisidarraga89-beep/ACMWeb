@@ -167,7 +167,7 @@ export default function Navbar() {
                 ACM
               </span>
               <span
-                className="font-sans text-[9px] tracking-[0.08em] uppercase mt-0.5 transition-colors duration-300"
+                className="font-sans text-[9px] tracking-[0.08em] mt-0.5 transition-colors duration-300"
                 style={{ color: isTransparent ? "rgba(251,248,244,0.5)" : "rgba(15,32,68,0.45)" }}
               >
                 Hogares{" "}
