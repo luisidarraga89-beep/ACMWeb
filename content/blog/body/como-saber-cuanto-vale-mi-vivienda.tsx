@@ -1,4 +1,4 @@
-import { H2, Lead, P, UL, PullQuote } from "@/components/blog/BlogProse";
+import { H2, Lead, P, UL, PullQuote } from "@/components/ui/Prose";
 import ArticleCTA from "@/components/blog/ArticleCTA";
 import { getBlogPostBySlug } from "@/content/blog/posts";
 

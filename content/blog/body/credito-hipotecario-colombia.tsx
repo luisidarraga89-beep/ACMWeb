@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { H2, Lead, P, UL, PullQuote, Checklist, ChecklistItem } from "@/components/blog/BlogProse";
+import { H2, Lead, P, UL, PullQuote, Checklist, ChecklistItem } from "@/components/ui/Prose";
 import ArticleCTA from "@/components/blog/ArticleCTA";
 import { getBlogPostBySlug } from "@/content/blog/posts";
 

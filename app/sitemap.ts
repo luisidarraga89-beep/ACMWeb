@@ -14,6 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${url}/inversiones`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${url}/blog`,        lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${url}/contacto`,    lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${url}/privacidad`,  lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
+    { url: `${url}/terminos`,    lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
   ];
 
   const propertyRoutes: MetadataRoute.Sitemap = getAllProperties().map((p) => ({
