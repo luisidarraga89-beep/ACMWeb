@@ -1,6 +1,20 @@
 export type PropertyStatus = "venta" | "arriendo" | "vendido" | "reservado";
-export type PropertyType   = "apartamento" | "casa" | "penthouse" | "duplex" | "lote" | "oficina" | "local";
+
+export type PropertyType =
+  | "apartamento" | "apartaestudio" | "casa" | "casa-campestre" | "penthouse"
+  | "duplex" | "finca" | "lote" | "oficina" | "local" | "bodega"
+  | "parqueadero" | "edificio" | "consultorio";
+
 export type PropertyZone   = "bogota" | "chia" | "cajica" | "cota" | "sabana" | "zipaquira" | "otro";
+
+/** Vivienda nueva (obra nueva / sin estrenar) vs. usada (segunda mano). */
+export type PropertyCondition = "nueva" | "usada";
+
+export type PropertyAmenity =
+  | "balcon" | "terraza" | "garaje" | "piscina" | "ascensor" | "amoblada"
+  | "gimnasio" | "zona-social" | "vigilancia" | "deposito"
+  | "aire-acondicionado" | "chimenea" | "vista-panoramica" | "zonas-verdes"
+  | "cancha" | "bbq";
 
 export interface PropertyImage {
   url:        string;
@@ -22,9 +36,12 @@ export interface Property {
   status:       PropertyStatus;
   type:         PropertyType;
   zone:         PropertyZone;
+  department:   string;        // Departamento de Colombia — "Bogotá D.C.", "Cundinamarca", …
   neighborhood: string;
   city:         string;
   area:         string;
+  condition?:   PropertyCondition;
+  amenities?:   PropertyAmenity[];
   bedrooms?:    number;
   bathrooms?:   number;
   parking?:     number;
