@@ -1,20 +1,84 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ACMLogo from "@/components/icons/ACMLogo";
 import { whatsappUrl } from "@/lib/config";
 
-const NAV_LINKS = [
-  { label: "Inicio",      href: "/" },
-  { label: "Nosotros",    href: "/nosotros" },
-  { label: "Propiedades", href: "/propiedades" },
-  { label: "Inversiones", href: "/inversiones" },
-  { label: "Blog",        href: "/blog" },
-  { label: "Contacto",    href: "/contacto" },
-] as const;
+interface NavSubLink { label: string; href: string }
+interface NavLink { label: string; href: string; submenu?: NavSubLink[] }
+
+const NAV_LINKS: NavLink[] = [
+  {
+    label: "Inicio", href: "/",
+    submenu: [
+      { label: "Para vivir",              href: "/#hogares" },
+      { label: "Propiedades destacadas",  href: "/#destacadas" },
+      { label: "Cómo trabajamos",         href: "/#como-trabajamos" },
+      { label: "Testimonios",             href: "/#testimonios" },
+      { label: "Contacto",                href: "/#hablemos" },
+    ],
+  },
+  {
+    label: "Nosotros", href: "/nosotros",
+    submenu: [
+      { label: "Quiénes somos",     href: "/nosotros#quienes-somos" },
+      { label: "Historia",          href: "/nosotros#historia" },
+      { label: "Propósito",         href: "/nosotros#proposito" },
+      { label: "Misión y visión",   href: "/nosotros#mision-vision" },
+      { label: "Valores",           href: "/nosotros#valores" },
+      { label: "Nuestro equipo",    href: "/nosotros#equipo" },
+    ],
+  },
+  {
+    label: "Propiedades", href: "/propiedades",
+    submenu: [
+      { label: "Todas las propiedades", href: "/propiedades" },
+      { label: "Filtros de búsqueda",   href: "/propiedades#filtros" },
+      { label: "En venta",              href: "/propiedades?operacion=venta#filtros" },
+      { label: "En arriendo",           href: "/propiedades?operacion=arriendo#filtros" },
+    ],
+  },
+  {
+    label: "Inversiones", href: "/inversiones",
+    submenu: [
+      { label: "Factores clave",       href: "/inversiones#factores" },
+      { label: "Cómo genera valor",    href: "/inversiones#como-genera-valor" },
+      { label: "Diversificar",         href: "/inversiones#diversificar" },
+      { label: "Nuestro proceso",      href: "/inversiones#proceso" },
+      { label: "Gestión de alquileres",href: "/inversiones#gestion-alquileres" },
+      { label: "Desde el exterior",    href: "/inversiones#internacional" },
+      { label: "Oportunidades",        href: "/inversiones#oportunidades" },
+    ],
+  },
+  {
+    label: "Blog", href: "/blog",
+    submenu: [
+      { label: "Todos los artículos", href: "/blog" },
+      { label: "Comprar",             href: "/blog?categoria=comprar#categorias" },
+      { label: "Invertir",            href: "/blog?categoria=invertir#categorias" },
+      { label: "Vender",              href: "/blog?categoria=vender#categorias" },
+      { label: "Alquilar",            href: "/blog?categoria=alquilar#categorias" },
+    ],
+  },
+  { label: "Contacto", href: "/contacto" },
+];
+
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      className="w-3 h-3 transition-transform duration-200"
+      style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+      aria-hidden="true"
+    >
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
 
 export default function Navbar() {
   const pathname   = usePathname();
@@ -23,6 +87,9 @@ export default function Navbar() {
   // Initialize scrolled from actual scroll position to avoid flash
   const [scrolled,   setScrolled]   = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openMenu,       setOpenMenu]       = useState<string | null>(null);
+  const [openMobileSub,  setOpenMobileSub]  = useState<string | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 60);
@@ -35,7 +102,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  useEffect(() => { setMobileOpen(false); }, [pathname]);
+  useEffect(() => { setMobileOpen(false); setOpenMenu(null); setOpenMobileSub(null); }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -44,6 +111,22 @@ export default function Navbar() {
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  const openDropdown = (href: string) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpenMenu(href);
+  };
+  const closeDropdownDelayed = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpenMenu(null), 150);
+  };
+
+  useEffect(() => {
+    if (!openMenu) return;
+    const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpenMenu(null); };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [openMenu]);
 
   /*
     Navbar appearance:
@@ -96,26 +179,72 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1" aria-label="Navegación principal">
-            {NAV_LINKS.map(({ label, href }) => (
-              <Link
+            {NAV_LINKS.map(({ label, href, submenu }) => (
+              <div
                 key={href}
-                href={href}
-                className="relative font-sans font-medium text-sm px-3 py-1.5 rounded transition-colors duration-200"
-                style={{
-                  color: isActive(href)
-                    ? (isTransparent ? "#fff" : "#0F2044")
-                    : (isTransparent ? "rgba(251,248,244,0.75)" : "rgba(15,32,68,0.6)"),
-                }}
+                className="relative"
+                onMouseEnter={() => submenu && openDropdown(href)}
+                onMouseLeave={() => submenu && closeDropdownDelayed()}
               >
-                {label}
-                {isActive(href) && (
-                  <motion.span
-                    layoutId="nav-underline"
-                    className="absolute bottom-0 left-3 right-3 h-px bg-orange-acm rounded-full"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </Link>
+                <div className="flex items-center">
+                  <Link
+                    href={href}
+                    className="relative font-sans font-medium text-sm pl-3 py-1.5 rounded transition-colors duration-200"
+                    style={{
+                      color: isActive(href)
+                        ? (isTransparent ? "#fff" : "#0F2044")
+                        : (isTransparent ? "rgba(251,248,244,0.75)" : "rgba(15,32,68,0.6)"),
+                    }}
+                  >
+                    {label}
+                    {isActive(href) && (
+                      <motion.span
+                        layoutId="nav-underline"
+                        className="absolute bottom-0 left-3 right-3 h-px bg-orange-acm rounded-full"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </Link>
+                  {submenu && (
+                    <button
+                      type="button"
+                      onClick={() => setOpenMenu(openMenu === href ? null : href)}
+                      aria-label={`Mostrar secciones de ${label}`}
+                      aria-expanded={openMenu === href}
+                      className="p-1.5 pr-3 -ml-1 rounded transition-colors duration-200"
+                      style={{ color: isTransparent ? "rgba(251,248,244,0.6)" : "rgba(15,32,68,0.45)" }}
+                    >
+                      <ChevronIcon open={openMenu === href} />
+                    </button>
+                  )}
+                </div>
+
+                <AnimatePresence>
+                  {submenu && openMenu === href && (
+                    <motion.div
+                      role="menu"
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute top-full left-0 mt-2 min-w-[230px] bg-white border border-navy-deep/8 rounded-lg shadow-xl py-2 z-[210]"
+                    >
+                      {submenu.map((sub) => (
+                        <Link
+                          key={sub.href}
+                          href={sub.href}
+                          role="menuitem"
+                          onClick={() => setOpenMenu(null)}
+                          className="flex items-center gap-2.5 px-4 py-2.5 font-sans text-sm text-navy-deep/70 hover:text-navy-deep hover:bg-navy-deep/5 transition-colors duration-150"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-orange-acm shrink-0" aria-hidden="true" />
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ))}
           </nav>
 
@@ -201,17 +330,57 @@ export default function Navbar() {
               </div>
 
               <nav className="flex-1 overflow-y-auto px-2 py-4">
-                {NAV_LINKS.map(({ label, href }) => (
-                  <Link key={href} href={href}
-                    className="flex items-center justify-between px-4 py-3.5 rounded-lg font-sans font-medium text-[15px] transition-colors mb-1"
-                    style={{
-                      color:      isActive(href) ? "#0F2044" : "rgba(15,32,68,0.6)",
-                      background: isActive(href) ? "rgba(15,32,68,0.05)" : "transparent",
-                    }}
-                  >
-                    {label}
-                    {isActive(href) && <span className="w-1.5 h-1.5 rounded-full bg-orange-acm" aria-hidden="true" />}
-                  </Link>
+                {NAV_LINKS.map(({ label, href, submenu }) => (
+                  <div key={href} className="mb-1">
+                    <div
+                      className="flex items-center justify-between rounded-lg transition-colors"
+                      style={{ background: isActive(href) ? "rgba(15,32,68,0.05)" : "transparent" }}
+                    >
+                      <Link
+                        href={href}
+                        onClick={() => setMobileOpen(false)}
+                        className="flex-1 flex items-center gap-2 px-4 py-3.5 font-sans font-medium text-[15px] transition-colors"
+                        style={{ color: isActive(href) ? "#0F2044" : "rgba(15,32,68,0.6)" }}
+                      >
+                        {label}
+                        {isActive(href) && <span className="w-1.5 h-1.5 rounded-full bg-orange-acm" aria-hidden="true" />}
+                      </Link>
+                      {submenu && (
+                        <button
+                          type="button"
+                          onClick={() => setOpenMobileSub(openMobileSub === href ? null : href)}
+                          aria-label={`Mostrar secciones de ${label}`}
+                          aria-expanded={openMobileSub === href}
+                          className="px-4 py-3.5 text-navy-deep/45"
+                        >
+                          <ChevronIcon open={openMobileSub === href} />
+                        </button>
+                      )}
+                    </div>
+                    <AnimatePresence>
+                      {submenu && openMobileSub === href && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          {submenu.map((sub) => (
+                            <Link
+                              key={sub.href}
+                              href={sub.href}
+                              onClick={() => setMobileOpen(false)}
+                              className="flex items-center gap-2.5 py-2.5 pl-9 pr-4 font-sans text-[13.5px] text-navy-deep/60 hover:text-navy-deep transition-colors"
+                            >
+                              <span className="w-1 h-1 rounded-full bg-orange-acm/70 shrink-0" aria-hidden="true" />
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 ))}
               </nav>
 

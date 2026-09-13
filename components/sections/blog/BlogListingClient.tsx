@@ -19,6 +19,8 @@ const FILTERS: { key: FilterKey; label: string }[] = [
   { key: "alquilar", label: BLOG_CATEGORY_LABEL.alquilar },
 ];
 
+const VALID_CATEGORIES: readonly string[] = FILTERS.map((f) => f.key);
+
 function ReadCta() {
   return (
     <span className="inline-flex items-center gap-1.5 font-sans font-semibold text-orange-acm" style={{ fontSize: TS.bodySm }}>
@@ -94,8 +96,17 @@ function PostCard({ post }: { post: BlogPostMeta }) {
   );
 }
 
-export default function BlogListingClient({ posts, featured }: { posts: BlogPostMeta[]; featured: BlogPostMeta }) {
-  const [filter, setFilter] = useState<FilterKey>("todos");
+export default function BlogListingClient({
+  posts, featured, initialCategory,
+}: {
+  posts: BlogPostMeta[];
+  featured: BlogPostMeta;
+  initialCategory?: string;
+}) {
+  const initialFilter = initialCategory && VALID_CATEGORIES.includes(initialCategory)
+    ? (initialCategory as FilterKey)
+    : "todos";
+  const [filter, setFilter] = useState<FilterKey>(initialFilter);
 
   const showFeatured = filter === "todos";
 
@@ -126,7 +137,7 @@ export default function BlogListingClient({ posts, featured }: { posts: BlogPost
       </section>
 
       {/* Filters + grid */}
-      <section className="bg-cream" style={{ paddingBlock: SP.section }}>
+      <section id="categorias" className="bg-cream scroll-mt-24" style={{ paddingBlock: SP.section }}>
         <div className="container-acm">
           <Reveal className="flex flex-wrap gap-2.5 mb-10 md:mb-14">
             {FILTERS.map(({ key, label }) => (

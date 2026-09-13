@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { getAllProperties } from "@/content/properties";
 import { TS, LH, LS, SP, EASE } from "@/lib/design-tokens";
@@ -291,6 +291,14 @@ export default function PropiedadesPage() {
   const properties = getAllProperties();
   const [filters, setFilters] = useFilterState();
 
+  // Presets the operation filter from the navbar's "En venta" / "En arriendo" shortcuts.
+  useEffect(() => {
+    const operacion = new URLSearchParams(window.location.search).get("operacion");
+    if (operacion === "venta" || operacion === "arriendo") {
+      setFilters((f) => ({ ...f, operation: operacion }));
+    }
+  }, [setFilters]);
+
   const filtered = useMemo(() => {
     const q = filters.q.trim().toLowerCase();
 
@@ -344,7 +352,7 @@ export default function PropiedadesPage() {
       </section>
 
       {/* Grid */}
-      <section className="bg-cream" style={{ paddingBlock: SP.section }}>
+      <section id="filtros" className="bg-cream scroll-mt-24" style={{ paddingBlock: SP.section }}>
         <div className="container-acm">
           <Reveal>
             <PropertyFilters properties={properties} filters={filters} setFilters={setFilters} resultCount={filtered.length} />

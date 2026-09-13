@@ -63,7 +63,7 @@ export default function NosotrosClient() {
   return (
     <>
       {/* Hero — Quiénes somos */}
-      <section className="bg-navy-deep relative overflow-hidden" style={{ paddingBlock: "clamp(7rem, 14vw, 12rem)" }}>
+      <section id="quienes-somos" className="bg-navy-deep relative overflow-hidden scroll-mt-24" style={{ paddingBlock: "clamp(7rem, 14vw, 12rem)" }}>
         <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.028) 1px, transparent 1px)", backgroundSize: "38px 38px" }} aria-hidden="true" />
         <div className="container-acm relative">
           <Reveal>
@@ -89,7 +89,7 @@ export default function NosotrosClient() {
       </section>
 
       {/* Historia */}
-      <section className="bg-cream" style={{ paddingBlock: SP.section }}>
+      <section id="historia" className="bg-cream scroll-mt-24" style={{ paddingBlock: SP.section }}>
         <div className="container-acm">
           <Reveal>
             <p className="font-sans font-semibold text-orange-acm uppercase" style={{ fontSize: TS.caption, letterSpacing: LS.label, marginBottom: "1.125rem" }}>Nuestra historia</p>
@@ -121,7 +121,7 @@ export default function NosotrosClient() {
       </section>
 
       {/* Propósito */}
-      <section className="bg-navy-deep relative overflow-hidden" style={{ paddingBlock: SP.section }}>
+      <section id="proposito" className="bg-navy-deep relative overflow-hidden scroll-mt-24" style={{ paddingBlock: SP.section }}>
         <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.028) 1px, transparent 1px)", backgroundSize: "38px 38px" }} aria-hidden="true" />
         <div className="container-acm relative text-center" style={{ maxWidth: "44rem", marginInline: "auto" }}>
           <Reveal>
@@ -138,7 +138,7 @@ export default function NosotrosClient() {
       </section>
 
       {/* Misión y visión */}
-      <section className="bg-cream" style={{ paddingBlock: SP.section }}>
+      <section id="mision-vision" className="bg-cream scroll-mt-24" style={{ paddingBlock: SP.section }}>
         <div className="container-acm">
           <Reveal>
             <p className="font-sans font-semibold text-orange-acm uppercase" style={{ fontSize: TS.caption, letterSpacing: LS.label, marginBottom: "1.125rem" }}>Misión y visión 2031</p>
@@ -170,7 +170,7 @@ export default function NosotrosClient() {
       </section>
 
       {/* Valores */}
-      <section className="bg-cream border-t border-graphite/10" style={{ paddingBlock: SP.section }}>
+      <section id="valores" className="bg-cream border-t border-graphite/10 scroll-mt-24" style={{ paddingBlock: SP.section }}>
         <div className="container-acm">
           <Reveal>
             <p className="font-sans font-semibold text-orange-acm uppercase" style={{ fontSize: TS.caption, letterSpacing: LS.label, marginBottom: "1.125rem" }}>Valores corporativos</p>
@@ -196,7 +196,7 @@ export default function NosotrosClient() {
       </section>
 
       {/* Team members */}
-      <section className="bg-cream" style={{ paddingBlock: SP.section }}>
+      <section id="equipo" className="bg-cream scroll-mt-24" style={{ paddingBlock: SP.section }}>
         <div className="container-acm">
           <Reveal>
             <p className="font-sans font-semibold text-orange-acm uppercase" style={{ fontSize: TS.caption, letterSpacing: LS.label, marginBottom: "1.125rem" }}>El equipo</p>
