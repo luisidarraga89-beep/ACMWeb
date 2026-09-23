@@ -625,9 +625,10 @@ function TestimonialsSection() {
           </div>
         </Reveal>
 
-        <div
+        <motion.div
+          layout
           className="relative overflow-hidden"
-          style={{ minHeight: "clamp(13rem, 24vw, 16rem)" }}
+          transition={{ layout: { duration: 0.4, ease: EASE } }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}
@@ -641,7 +642,6 @@ function TestimonialsSection() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: dir >= 0 ? -24 : 24 }}
               transition={{ duration: 0.4, ease: EASE }}
-              className="absolute inset-0"
             >
               <blockquote
                 className="font-display italic text-navy-deep"
@@ -651,10 +651,6 @@ function TestimonialsSection() {
                   lineHeight: LH.tight,
                   maxWidth: "42em",
                   marginBottom: "1.25rem",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 4,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
                 }}
               >
                 <span className="text-orange-acm" aria-hidden="true">"</span>
@@ -675,7 +671,7 @@ function TestimonialsSection() {
               </figcaption>
             </motion.figure>
           </AnimatePresence>
-        </div>
+        </motion.div>
 
         <div className="flex items-center gap-2 mt-10">
           {testimonials.map((item, i) => (
