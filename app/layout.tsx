@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import WhatsAppFAB from "@/components/layout/WhatsAppFAB";
 import CookieConsent from "@/components/analytics/CookieConsent";
 import AnalyticsScripts from "@/components/analytics/AnalyticsScripts";
+import { buildOrganizationSchema } from "@/lib/blog-schema";
 
 const loraFont = Lora({ subsets: ["latin"], weight: ["400","500","600"], style: ["normal","italic"], variable: "--font-lora", display: "swap" });
 const jakartaFont = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["300","400","500","600","700","800"], variable: "--font-jakarta", display: "swap" });
@@ -23,6 +24,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-CO" className={`${loraFont.variable} ${jakartaFont.variable}`} suppressHydrationWarning>
       <head><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /></head>
       <body className="bg-cream text-navy-deep antialiased" suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationSchema()) }}
+        />
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-orange-acm focus:text-white focus:rounded focus:font-semibold">Ir al contenido principal</a>
         <Navbar />
         <div className="flex flex-col min-h-screen">{children}</div>

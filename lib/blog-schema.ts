@@ -32,6 +32,31 @@ export function buildArticleSchema(post: BlogPostMeta) {
   };
 }
 
+export function buildOrganizationSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type":    "RealEstateAgent",
+    name:       siteConfig.name,
+    description: "Asesoría inmobiliaria honesta en Bogotá y todo Cundinamarca.",
+    url:        siteConfig.url,
+    logo:       `${siteConfig.url}/images/acm-logo.svg`,
+    image:      `${siteConfig.url}/images/acm-logo.svg`,
+    telephone:  siteConfig.contact.phone,
+    email:      siteConfig.contact.email,
+    address: {
+      "@type":          "PostalAddress",
+      streetAddress:    siteConfig.contact.address,
+      addressLocality:  "Bogotá",
+      addressCountry:   "CO",
+    },
+    sameAs: [
+      siteConfig.social.instagram,
+      siteConfig.social.facebook,
+      siteConfig.social.linkedin,
+    ],
+  };
+}
+
 export function buildBreadcrumbSchema(items: { label: string; href: string }[]) {
   return {
     "@context": "https://schema.org",
