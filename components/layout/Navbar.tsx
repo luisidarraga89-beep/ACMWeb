@@ -14,10 +14,8 @@ const NAV_LINKS: NavLink[] = [
   {
     label: "Inicio", href: "/",
     submenu: [
-      { label: "Para vivir",              href: "/#hogares" },
       { label: "Propiedades destacadas",  href: "/#destacadas" },
       { label: "Cómo trabajamos",         href: "/#como-trabajamos" },
-      { label: "Testimonios",             href: "/#testimonios" },
       { label: "Contacto",                href: "/#hablemos" },
     ],
   },
@@ -25,18 +23,14 @@ const NAV_LINKS: NavLink[] = [
     label: "Nosotros", href: "/nosotros",
     submenu: [
       { label: "Quiénes somos",     href: "/nosotros#quienes-somos" },
-      { label: "Historia",          href: "/nosotros#historia" },
-      { label: "Propósito",         href: "/nosotros#proposito" },
-      { label: "Misión y visión",   href: "/nosotros#mision-vision" },
-      { label: "Valores",           href: "/nosotros#valores" },
       { label: "Nuestro equipo",    href: "/nosotros#equipo" },
+      { label: "Valores",           href: "/nosotros#valores" },
     ],
   },
   {
     label: "Propiedades", href: "/propiedades",
     submenu: [
       { label: "Todas las propiedades", href: "/propiedades" },
-      { label: "Filtros de búsqueda",   href: "/propiedades#filtros" },
       { label: "En venta",              href: "/propiedades?operacion=venta#filtros" },
       { label: "En arriendo",           href: "/propiedades?operacion=arriendo#filtros" },
     ],
@@ -44,12 +38,8 @@ const NAV_LINKS: NavLink[] = [
   {
     label: "Inversiones", href: "/inversiones",
     submenu: [
-      { label: "Factores clave",       href: "/inversiones#factores" },
       { label: "Cómo genera valor",    href: "/inversiones#como-genera-valor" },
-      { label: "Diversificar",         href: "/inversiones#diversificar" },
-      { label: "Nuestro proceso",      href: "/inversiones#proceso" },
       { label: "Gestión de alquileres",href: "/inversiones#gestion-alquileres" },
-      { label: "Desde el exterior",    href: "/inversiones#internacional" },
       { label: "Oportunidades",        href: "/inversiones#oportunidades" },
     ],
   },
