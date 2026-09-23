@@ -5,9 +5,9 @@ export const siteConfig = {
   locale:  "es-CO",
 
   contact: {
-    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "573115480859",
+    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "573057282269",
     email:    process.env.NEXT_PUBLIC_CONTACT_EMAIL   ?? "acmhogareseinversiones@gmail.com",
-    phone:    process.env.NEXT_PUBLIC_PHONE           ?? "+57 311 548 0859",
+    phone:    process.env.NEXT_PUBLIC_PHONE           ?? "+57 305 728 2269",
     address:  "Calle 186 # 8-14b, Bogotá",
     city:     "Bogotá, Colombia",
   },
@@ -16,7 +16,7 @@ export const siteConfig = {
     instagram: "https://www.instagram.com/acmproperty12",
     facebook:  "https://www.facebook.com/profile.php?id=61552925627486",
     linkedin:  "https://www.linkedin.com/company/acminhogares",
-    whatsapp:  "https://wa.me/573115480859",
+    whatsapp:  "https://wa.me/573057282269",
   },
 
   analytics: {

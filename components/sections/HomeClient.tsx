@@ -191,10 +191,9 @@ function HogaresSection() {
                   marginBottom: SP.headlineToBody,
                 }}
               >
-                Encontrar el hogar correcto
-                toma tiempo.{" "}
+                Tu próximo hogar empieza{" "}
                 <span className="text-graphite/48">
-                  Nosotros ya lo tenemos.
+                  con una buena conversación.
                 </span>
               </h2>
 
@@ -207,9 +206,12 @@ function HogaresSection() {
                   marginBottom: "1.75rem",
                 }}
               >
-                Antes de ir a ver el apartamento, revisamos si el crédito da.
-                No mostramos propiedades por mostrar — encontramos las que
-                tienen sentido para cada presupuesto y cada momento de vida.
+                Cuéntanos qué estás buscando, qué necesitas y qué tienes en
+                mente. Nosotros nos encargamos de ayudarte a encontrar
+                opciones que encajen contigo y con tu presupuesto. No se
+                trata de mostrarte propiedades por mostrar. Se trata de
+                encontrar un lugar que realmente tenga sentido para ti y
+                acompañarte durante todo el camino.
               </p>
 
               <ul
@@ -225,9 +227,9 @@ function HogaresSection() {
                 }}
               >
                 {[
-                  "Diagnóstico financiero antes de empezar",
-                  "Filtro de opciones según presupuesto real",
-                  "Acompañamiento hasta la entrega de llaves",
+                  "Hablamos de lo que necesitas",
+                  "Buscamos opciones que se ajusten a ti",
+                  "Te acompañamos hasta que tengas las llaves",
                 ].map((item) => (
                   <li key={item} className="flex items-baseline gap-3.5">
                     <span
@@ -239,14 +241,6 @@ function HogaresSection() {
                   </li>
                 ))}
               </ul>
-
-              <Link
-                href="/propiedades"
-                className="btn-secondary inline-flex"
-                style={{ fontSize: TS.bodySm, padding: "0.75rem 1.625rem" }}
-              >
-                Ver propiedades disponibles
-              </Link>
             </Reveal>
           </div>
 
@@ -457,23 +451,23 @@ function PropertiesSection() {
 const STEPS = [
   {
     n:     "01",
-    title: "Primero validamos viabilidad.",
-    body:  "Antes de agendar cualquier visita, revisamos presupuesto, capacidad financiera y zonas que tengan sentido para el objetivo.",
+    title: "Te escuchamos primero.",
+    body:  "Antes de mostrarte nada, entendemos qué buscas, qué necesitas y qué tienes en mente — sin formularios fríos ni evaluaciones apresuradas.",
   },
   {
     n:     "02",
-    title: "Luego filtramos opciones.",
-    body:  "No mostramos propiedades por mostrar. Solo presentamos lo que cumple los criterios. Si algo no encaja, lo decimos.",
+    title: "Buscamos con criterio, no por mostrar.",
+    body:  "Filtramos las opciones que de verdad tienen sentido para ti. Si algo no encaja, te lo decimos con honestidad.",
   },
   {
     n:     "03",
-    title: "Coordinamos cada etapa.",
-    body:  "Visitas, crédito hipotecario, documentación y trámites notariales. El cliente no enfrenta el proceso solo.",
+    title: "Te acompañamos en cada paso.",
+    body:  "Visitas, crédito, documentación y trámites — coordinamos todo para que no enfrentes el proceso solo.",
   },
   {
     n:     "04",
-    title: "Acompañamos hasta el final.",
-    body:  "El proceso termina cuando el cliente recibe su propiedad y siente tranquilidad con la decisión tomada.",
+    title: "Seguimos hasta que tengas las llaves.",
+    body:  "El acompañamiento no termina con la firma. Termina cuando sientes tranquilidad con la decisión que tomaste.",
   },
 ] as const;
 

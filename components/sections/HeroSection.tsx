@@ -184,7 +184,7 @@ export default function HeroSection({
               marginBottom: "clamp(1.75rem, 4vw, 2.5rem)",
             }}
           >
-            Acompañamiento inmobiliario para hogares e inversiones.
+            Te acompañamos en cada paso para comprar, vender o invertir en finca raíz con claridad y confianza.
           </p>
 
         </motion.div>
